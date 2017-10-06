@@ -10,11 +10,13 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import static com.google.common.collect.Lists.newArrayList;
 
 @SpringBootApplication
+@EnableDiscoveryClient
 @Slf4j
 public class Fares implements CommandLineRunner {
 
