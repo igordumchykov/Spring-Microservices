@@ -1,6 +1,6 @@
 package com.brownfield.pss.search.model;
 
-import com.brownfield.pss.common.model.BaseEntity;
+import com.brownfield.pss.search.apigateway.common.model.BaseEntity;
 import lombok.*;
 
 import javax.persistence.CascadeType;

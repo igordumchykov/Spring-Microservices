@@ -1,8 +1,8 @@
 package com.brownfield.pss.search.service;
 
+import com.brownfield.pss.search.model.Inventory;
 import com.brownfield.pss.search.dto.SearchQuery;
 import com.brownfield.pss.search.model.Flight;
-import com.brownfield.pss.search.model.Inventory;
 import com.brownfield.pss.search.repository.FlightRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

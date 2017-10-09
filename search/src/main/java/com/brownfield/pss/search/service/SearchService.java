@@ -1,7 +1,7 @@
 package com.brownfield.pss.search.service;
 
-import com.brownfield.pss.search.dto.SearchQuery;
 import com.brownfield.pss.search.model.Flight;
+import com.brownfield.pss.search.dto.SearchQuery;
 
 import java.util.List;
 

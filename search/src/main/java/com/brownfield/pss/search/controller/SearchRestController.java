@@ -1,8 +1,8 @@
 package com.brownfield.pss.search.controller;
 
+import com.brownfield.pss.search.model.Flight;
 import com.brownfield.pss.search.service.SearchServiceImpl;
 import com.brownfield.pss.search.dto.SearchQuery;
-import com.brownfield.pss.search.model.Flight;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
