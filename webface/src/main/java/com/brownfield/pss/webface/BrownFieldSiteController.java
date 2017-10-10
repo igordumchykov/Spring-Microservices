@@ -1,6 +1,6 @@
-package com.brownfield.pss.client;
+package com.brownfield.pss.webface;
 
-import com.brownfield.pss.client.dto.*;
+import com.brownfield.pss.webface.dto.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.brownfield.pss.client.dto;
+package com.brownfield.pss.webface.dto;
 
 
 import lombok.Data;

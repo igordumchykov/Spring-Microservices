@@ -1,4 +1,4 @@
-package com.brownfield.pss.client;
+package com.brownfield.pss.webface;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @SpringBootApplication
 @EnableDiscoveryClient
 @Slf4j
-@Import(AppConfid.class)
+@Import(AppConfig.class)
 public class Website implements CommandLineRunner {
 
     @Autowired
