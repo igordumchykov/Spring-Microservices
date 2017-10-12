@@ -1,8 +1,8 @@
 package com.brownfield.pss.search.controller;
 
+import com.brownfield.pss.search.dto.SearchQuery;
 import com.brownfield.pss.search.model.Flight;
 import com.brownfield.pss.search.service.SearchServiceImpl;
-import com.brownfield.pss.search.dto.SearchQuery;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +26,12 @@ class SearchRestController {
     public List<Flight> search(@RequestBody SearchQuery query) {
         log.debug("Input: {}", query);
         return searchComponent.search(query);
+    }
+
+    @RequestMapping("/hub")
+    public String getHub() {
+        log.info("Searching for Hub, received from search-apigateway ");
+        return "SFO";
     }
 
 }

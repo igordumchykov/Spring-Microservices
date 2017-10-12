@@ -15,7 +15,9 @@ import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -25,6 +27,12 @@ import static com.google.common.collect.Lists.newArrayList;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Search implements CommandLineRunner {
+
+    //indicate that the span ID has to be created every time a call hits the service
+    @Bean
+    public AlwaysSampler defaultSampler(){
+        return new AlwaysSampler();
+    }
 
     @Autowired
     private FlightRepository flightRepository;
