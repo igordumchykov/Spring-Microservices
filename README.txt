@@ -74,3 +74,74 @@ Logging
 
 7. Go to localhost:5601
 ------------------------------------------------------------------------------------------------------------------------
+
+Run everything in Docker:
+1. For each microservice add Dockerfile:
+
+FROM frolvlad/alpine-oraclejdk8
+VOLUME /tmp
+ADD  target/<name_in_target>.jar <desired_name>.jar
+EXPOSE 8001
+ENTRYPOINT ["java","-jar","/<desired_name>.jar"]
+
+2. In root of each microservice:
+
+docker build -t <desired_name>:<version> .
+docker run -d -p <port>:<mapping_port> <service_name (desired_name with version)>
+
+docker build -t search:1.0 .
+
+
+3. For config server docker run:
+docker run -d -v <host_path_dir_to_config>:<docker_dir> -p <port>:<mapping_port> <service_name (desired_name with version)>
+in config server props change:
+spring.cloud.config.server.git.uri=file://<docker_dir>
+
+for our services:
+docker run -d -p 8888:8888 config-server:1.0
+docker run -d -v /Users/igordumchykov/Projects/Tutorials/microservices/config-repo:/app -p 8888:8888 config-server:1.0
+docker run -d -p 8761:8761 eureka-server:1.0
+docker run -d rabbitmq:3
+docker run -d -p 8090:8090 search:1.0
+docker run -d -p 8095:8095 search-apigateway:1.0
+docker run -d -p 8070:8070 checkin:1.0
+docker run -d -p 8080:8080 fares:1.0
+docker run -d -p 8060:8060 book:1.0
+docker run -d -p 8001:8001 webface:1.0
+
+or:
+
+docker run --net host -p 8888:8888 config-server:1.0
+docker run --net host  -v /Users/igordumchykov/Projects/Tutorials/microservices/config-repo:/app -p 8888:8888 config-server:1.0
+docker run --net host  -p 8761:8761 eureka-server:1.0
+docker run --net host  rabbitmq:3
+docker run --net host  -p 8090:8090 search:1.0
+docker run --net host  -p 8095:8095 search-apigateway:1.0
+docker run --net host  -p 8070:8070 checkin:1.0
+docker run --net host  -p 8080:8080 fares:1.0
+docker run --net host  -p 8060:8060 book:1.0
+docker run --net host  -p 8001:8001 webface:1.0
+
+kill all:
+docker stop $(docker ps -aq)
+
+The new networking feature allows you to connect to containers by their name, so if you create a new network, any container connected to that network can reach other containers by their name. Example:
+
+1) Create new network
+
+$ docker network create <network-name>
+2) Connect containers to network
+
+$ docker run --net=<network-name> ...
+or
+
+$ docker network connect <network-name> <container-name>
+3) Ping container by name
+
+docker exec -ti <container-name-A> ping <container-name-B>
+
+64 bytes from c1 (172.18.0.4): icmp_seq=1 ttl=64 time=0.137 ms
+64 bytes from c1 (172.18.0.4): icmp_seq=2 ttl=64 time=0.073 ms
+64 bytes from c1 (172.18.0.4): icmp_seq=3 ttl=64 time=0.074 ms
+64 bytes from c1 (172.18.0.4): icmp_seq=4 ttl=64 time=0.074 ms
+------------------------------------------------------------------------------------------------------------------------

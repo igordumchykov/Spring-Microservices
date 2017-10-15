@@ -9,10 +9,10 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>website</artifactId>
+	<artifactId>webface</artifactId>
 	<packaging>jar</packaging>
 
-	<name>website</name>
+	<name>webface</name>
 	<description>Demo project for Spring Boot</description>
 
 	<dependencies>

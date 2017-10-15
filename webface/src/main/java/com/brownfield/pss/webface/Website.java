@@ -1,5 +1,7 @@
 package com.brownfield.pss.webface;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,6 +18,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableGlobalMethodSecurity
 @SpringBootApplication
 @EnableDiscoveryClient
+@AllArgsConstructor
+@NoArgsConstructor
 @Slf4j
 @Import(AppConfig.class)
 public class Website implements CommandLineRunner {
@@ -32,7 +36,7 @@ public class Website implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        doHealthCheck();
+//        doHealthCheck();
     }
 
     private void doHealthCheck() {

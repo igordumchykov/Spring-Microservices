@@ -2,6 +2,8 @@ package com.brownfield.pss.webface.healthcheck;
 
 import com.brownfield.pss.webface.dto.*;
 import com.google.common.collect.Sets;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,14 +14,14 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 
-import static com.google.common.collect.Sets.newHashSet;
-
 /**
  * @author idumchykov
  * @since 10/4/17
  */
 @Slf4j
 @Component
+@AllArgsConstructor
+@NoArgsConstructor
 public class WebfaceHealthIndicator implements HealthIndicator {
 
     @Autowired

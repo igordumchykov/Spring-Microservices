@@ -2,6 +2,7 @@ package com.brownfield.pss.search.apigateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
@@ -12,17 +13,18 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @EnableZuulProxy
 @EnableDiscoveryClient
+@EnableCircuitBreaker
 public class SearchApigateway {
 
     //indicate that the span ID has to be created every time a call hits the service
     @Bean
-    public AlwaysSampler defaultSampler(){
+    public AlwaysSampler defaultSampler() {
         return new AlwaysSampler();
     }
 
     @LoadBalanced
     @Bean
-    public RestTemplate restTemplae(){
+    public RestTemplate restTemplae() {
         return new RestTemplate();
     }
 
