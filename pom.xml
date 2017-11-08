@@ -10,10 +10,16 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>base</module>
+    <module>common</module>
     <module>book</module>
     <module>checkin</module>
     <module>fares</module>
     <module>search</module>
+    <module>search-apigateway</module>
     <module>webface</module>
+    <module>server-config</module>
+    <module>eureka-server</module>
+    <module>hystrixdashboard</module>
   </modules>
 </project>

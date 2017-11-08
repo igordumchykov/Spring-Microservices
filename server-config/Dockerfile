@@ -1,6 +1,5 @@
-FROM frolvlad/alpine-oraclejdk8
+FROM java:8-jre
 VOLUME /tmp
-ADD  target/config-server-1.0.jar config-server.jar
+ADD  target/server-config-1.0.jar server-config.jar
 EXPOSE 8888
-ENTRYPOINT ["java","-jar","/config-server.jar"]
-
+ENTRYPOINT ["java","-jar","/server-config.jar"]

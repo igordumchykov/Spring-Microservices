@@ -98,29 +98,29 @@ in config server props change:
 spring.cloud.config.server.git.uri=file://<docker_dir>
 
 for our services:
-docker run -d -p 8888:8888 config-server:1.0
-docker run -d -v /Users/igordumchykov/Projects/Tutorials/microservices/config-repo:/app -p 8888:8888 config-server:1.0
-docker run -d -p 8761:8761 eureka-server:1.0
-docker run -d rabbitmq:3
-docker run -d -p 8090:8090 search:1.0
-docker run -d -p 8095:8095 search-apigateway:1.0
-docker run -d -p 8070:8070 checkin:1.0
-docker run -d -p 8080:8080 fares:1.0
-docker run -d -p 8060:8060 book:1.0
-docker run -d -p 8001:8001 webface:1.0
+docker run --net=pss-network -d -v /Users/igordumchykov/Projects/Tutorials/microservices/config-repo:/app -p 8888:8888 config-server:1.0
+or
+docker run -d -p 8888:8888 config-server:1.0 --spring.cloud.config.server.git.uri=https://github.com/igordumchykov/spring-microservices-config
 
-or:
+docker run -p 8761:8761 eureka-server:1.0
+docker run --net=pss -d rabbitmq:3
+docker run --net="example_default" -p 8090:8090 search-service
 
-docker run --net host -p 8888:8888 config-server:1.0
-docker run --net host  -v /Users/igordumchykov/Projects/Tutorials/microservices/config-repo:/app -p 8888:8888 config-server:1.0
-docker run --net host  -p 8761:8761 eureka-server:1.0
-docker run --net host  rabbitmq:3
-docker run --net host  -p 8090:8090 search:1.0
-docker run --net host  -p 8095:8095 search-apigateway:1.0
-docker run --net host  -p 8070:8070 checkin:1.0
-docker run --net host  -p 8080:8080 fares:1.0
-docker run --net host  -p 8060:8060 book:1.0
-docker run --net host  -p 8001:8001 webface:1.0
+docker run --net=pss -d -p 8095:8095 search-apigateway:1.0
+docker run --net=pss-network -d -p 8070:8070 checkin:1.0
+docker run --net=pss-network -d -p 8080:8080 fares:1.0
+docker run --net=pss-network -d -p 8060:8060 book:1.0
+docker run --net=pss-network -d -p 8001:8001 webface:1.0
+
+also in the end can add properties:
+docker run -d -p 8888:8888 config-server:1.0 --spring.cloud.config.server.git.uri=https://github.com/igordumchykov/spring-microservices-config
+
+build:
+
+docker build -t config-server:1.0 .
+docker build -t eureka-server:1.0 .
+docker build -t search-service:1.0 .
+docker build -t search-apigateway:1.0 .
 
 kill all:
 docker stop $(docker ps -aq)
@@ -145,3 +145,57 @@ docker exec -ti <container-name-A> ping <container-name-B>
 64 bytes from c1 (172.18.0.4): icmp_seq=3 ttl=64 time=0.074 ms
 64 bytes from c1 (172.18.0.4): icmp_seq=4 ttl=64 time=0.074 ms
 ------------------------------------------------------------------------------------------------------------------------
+
+Show host:
+Use grep to filter IP address from ifconfig:
+ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'
+Or with sed:
+ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'
+
+Add alias to host:
+
+vim ~/.bash_profile
+alias myhost="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
+
+create bash script add_host.sh:
+
+#!/bin/sh
+# Set the server's hostname
+myHostName="myhost"
+# Find and remove the current line with hostname at the end of line in /etc/hosts ($ is for end of line)
+sed -i '/'$myHostName'$/ d' /etc/hosts
+# Lookup the current IP Address and strip it out of the result
+ipaddr=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
+#  Add the server's current IP Address and HostName to /etc/hosts
+echo "$ipaddr $myHostName" >>/etc/hosts
+
+run as: ./add_host.sh
+------------------------------------------------------------------------------------------------------------------------
+Managing with ZooKeeper, Mesos and Marathon
+
+docker run -d \
+-p 2181:2181 \
+-p 2888:2888 \
+-p 3888:3888 \
+garland/zookeeper
+
+docker run -p 5050:5050 -e "MESOS_HOSTNAME=0.0.0.0" \
+-e "MESOS_IP=0.0.0.0" \
+-e "MESOS_ZK=zk://0.0.0.0:2181/mesos" \
+-e "MESOS_PORT=5050" \
+-e "MESOS_REGISTRY=in_memory" \
+-d \
+garland/mesosphere-docker-mesos-master
+
+docker run \
+-d \
+-p 8080:8080 \
+garland/mesosphere-docker-marathon --master zk://0.0.0.0:2181/mesos --zk zk://0.0.0.0:2181/marathon
+
+docker run -d \
+--name mesos_slave_1 \
+--entrypoint="mesos-slave" \
+-e "MESOS_MASTER=zk://0.0.0.0:2181/mesos" \
+-e "MESOS_LOG_DIR=/var/log/mesos" \
+-e "MESOS_LOGGING_LEVEL=INFO" \
+garland/mesosphere-docker-mesos-master:latest
