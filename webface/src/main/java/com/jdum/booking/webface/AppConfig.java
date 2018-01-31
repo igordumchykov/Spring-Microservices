@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 
-    //is used instead of Feign client
-    //use @Import(AppConfig.class) in main spring boot class to import configuration
 //    @LoadBalanced
 //    @Bean
 //    public RestTemplate restTemplate() {
