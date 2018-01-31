@@ -5,14 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.brownfield.pss</groupId>
-        <artifactId>brownfield-base</artifactId>
+        <groupId>com.jdum.booking</groupId>
+        <artifactId>booking-base</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>brownfield-common</artifactId>
+    <artifactId>booking-common</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>common</name>
+
 </project>

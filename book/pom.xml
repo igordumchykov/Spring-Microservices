@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.brownfield.pss</groupId>
-        <artifactId>brownfield-base</artifactId>
+        <groupId>com.jdum.booking</groupId>
+        <artifactId>booking-base</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
@@ -17,9 +17,17 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.brownfield.pss</groupId>
-            <artifactId>brownfield-common</artifactId>
+            <groupId>com.jdum.booking</groupId>
+            <artifactId>booking-common</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-client</artifactId>
         </dependency>
     </dependencies>
 

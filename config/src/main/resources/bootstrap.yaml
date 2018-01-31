@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: config
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/igordumchykov/booking-config
+          searchPaths: '{application}/{profile}'
+
+server:
+  port: 8888
+
+#enabling using sensitive actuator points
+management:
+  security:
+    enabled: false
+

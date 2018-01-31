@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: fares-service
+  cloud:
+    config:
+      uri: http://myhost:8888
+server:
+  port: 8080

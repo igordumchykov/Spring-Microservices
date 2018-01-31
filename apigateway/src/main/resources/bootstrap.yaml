@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: apigateway
+  cloud:
+    config:
+      uri: http://myhost:8888
+
+server:
+  port: 8095
+
+
