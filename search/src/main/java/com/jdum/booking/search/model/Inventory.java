@@ -22,7 +22,7 @@ public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "inv_id")
-    private long id;
+    private Long id;
 
     private int count;
 

@@ -18,7 +18,7 @@ public class Price implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "price_id")
-    private long id;
+    private Long id;
 
     private String priceAmount;
     private String currency;

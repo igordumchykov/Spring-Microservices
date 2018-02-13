@@ -18,8 +18,8 @@ public class Passenger extends BaseEntity {
     private String firstName;
     private String lastName;
 
-//    @Enumerated(value = EnumType.STRING)
-    private String gender;
+    @Enumerated(value = EnumType.STRING)
+    private Gender gender;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id")

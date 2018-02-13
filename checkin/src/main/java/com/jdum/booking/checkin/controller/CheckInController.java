@@ -17,12 +17,12 @@ public class CheckInController {
     private CheckinService checkinService;
 
     @RequestMapping("/get/{id}")
-    public CheckInRecordDTO getCheckIn(@PathVariable long id) {
+    public CheckInRecordDTO getCheckIn(@PathVariable Long id) {
         return checkinService.getCheckInRecord(id);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public long checkIn(@RequestBody CheckInRecordDTO checkIn) {
+    public Long checkIn(@RequestBody CheckInRecordDTO checkIn) {
         return checkinService.checkIn(checkIn);
     }
 

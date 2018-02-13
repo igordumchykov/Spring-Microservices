@@ -29,14 +29,14 @@ public class CheckinServiceImpl implements CheckinService {
     private Sender sender;
 
     @Override
-    public long checkIn(CheckInRecordDTO checkInRecordDTO) {
+    public Long checkIn(CheckInRecordDTO checkInRecordDTO) {
 
         CheckInRecord checkInRecord = mapperFacade.map(checkInRecordDTO, CheckInRecord.class);
 
         log.debug("Saving checkin: {}", checkInRecord);
 
         checkInRecord.setCheckInTime(new Date());
-        long id = checkinRepository.save(checkInRecord).getId();
+        Long id = checkinRepository.save(checkInRecord).getId();
 
         log.debug("Successfully saved checkin with id: {}", id);
 
@@ -46,7 +46,7 @@ public class CheckinServiceImpl implements CheckinService {
     }
 
     @Override
-    public CheckInRecordDTO getCheckInRecord(long id) {
+    public CheckInRecordDTO getCheckInRecord(Long id) {
         CheckInRecord checkInRecord = checkinRepository.findOne(id);
         return mapperFacade.map(checkInRecord, CheckInRecordDTO.class);
     }

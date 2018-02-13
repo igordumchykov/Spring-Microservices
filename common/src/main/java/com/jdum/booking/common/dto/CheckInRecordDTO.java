@@ -20,7 +20,7 @@ public class CheckInRecordDTO extends BaseDTO {
     private Date checkInTime;
     private String busNumber;
     private String tripDate;
-    private long bookingId;
+    private Long bookingId;
 
     public CheckInRecordDTO(String firstName, String lastName, String seatNumber, Date checkInTime, String busNumber,
                             String tripDate, long bookingId) {

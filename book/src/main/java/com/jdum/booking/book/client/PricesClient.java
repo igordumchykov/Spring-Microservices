@@ -1,6 +1,6 @@
 package com.jdum.booking.book.client;
 
-import com.jdum.booking.book.dto.Price;
+import com.jdum.booking.common.dto.PriceDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,5 +15,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface PricesClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "${client.prices.requests.get}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    Price getPrice(@RequestParam("busNumber") String busNumber, @RequestParam("tripDate") String tripDate);
+    PriceDTO getPrice(@RequestParam("busNumber") String busNumber, @RequestParam("tripDate") String tripDate);
 }

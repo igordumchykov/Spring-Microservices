@@ -9,9 +9,9 @@ import com.jdum.booking.common.dto.BookingRecordDTO;
  */
 public interface BookingService {
 
-    long book(BookingRecordDTO bookingRecord);
+    Long book(BookingRecordDTO bookingRecord);
 
-    BookingRecordDTO getBooking(long id);
+    BookingRecordDTO getBooking(Long id);
 
-    void updateStatus(BookingStatus status, long bookingId);
+    void updateStatus(BookingStatus status, Long bookingId);
 }

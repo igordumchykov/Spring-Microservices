@@ -14,5 +14,5 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface CheckinClient {
 
     @RequestMapping(method = RequestMethod.POST, value = "${client.checkin.requests.create}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    long create(CheckInRecordDTO checkInRecord);
+    Long create(CheckInRecordDTO checkInRecord);
 }

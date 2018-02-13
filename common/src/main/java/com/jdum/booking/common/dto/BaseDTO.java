@@ -9,5 +9,5 @@ import lombok.Data;
 @Data
 public class BaseDTO {
 
-    protected long id;
+    protected Long id;
 }

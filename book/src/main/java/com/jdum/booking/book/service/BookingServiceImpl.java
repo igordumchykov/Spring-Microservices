@@ -1,16 +1,13 @@
 package com.jdum.booking.book.service;
 
 import com.jdum.booking.book.client.PricesClient;
-import com.jdum.booking.book.dto.Price;
 import com.jdum.booking.book.exception.BookingException;
 import com.jdum.booking.book.jms.Sender;
-import com.jdum.booking.book.model.BookingRecord;
-import com.jdum.booking.book.model.BookingStatus;
-import com.jdum.booking.book.model.Inventory;
-import com.jdum.booking.book.model.Passenger;
+import com.jdum.booking.book.model.*;
 import com.jdum.booking.book.repository.BookingRepository;
 import com.jdum.booking.book.repository.InventoryRepository;
 import com.jdum.booking.common.dto.BookingRecordDTO;
+import com.jdum.booking.common.dto.PriceDTO;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +32,7 @@ public class BookingServiceImpl implements BookingService {
     private static String NEW_INVENTORY_MSG = "NEW_INVENTORY";
 
     @Autowired
-    private MapperFacade mapperFacade;
+    private MapperFacade bookingRecordMapper;
 
     @Autowired
     private BookingRepository bookingRepository;
@@ -50,7 +47,7 @@ public class BookingServiceImpl implements BookingService {
     private Sender sender;
 
     @Override
-    public long book(BookingRecordDTO bookingRecord) {
+    public Long book(BookingRecordDTO bookingRecord) {
 
         checkPrice(bookingRecord);
         Inventory inventory = getInventory(bookingRecord);
@@ -58,7 +55,7 @@ public class BookingServiceImpl implements BookingService {
         inventoryRepository.saveAndFlush(inventory);
         log.debug("Inventory was updated");
 
-        long id = saveBooking(bookingRecord);
+        Long id = saveBooking(bookingRecord);
 
         sendBookingEvent(bookingRecord, inventory);
 
@@ -77,12 +74,12 @@ public class BookingServiceImpl implements BookingService {
 
     private long saveBooking(BookingRecordDTO bookingRecordDTO) {
 
-        BookingRecord bookingRecord = mapperFacade.map(bookingRecordDTO, BookingRecord.class);
+        BookingRecord bookingRecord = bookingRecordMapper.map(bookingRecordDTO, BookingRecord.class);
         bookingRecord.setStatus(BookingStatus.BOOKING_CONFIRMED);
         Set<Passenger> passengers = bookingRecord.getPassengers();
         passengers.forEach(passenger -> passenger.setBookingRecord(bookingRecord));
-        bookingRecordDTO.setBookingDate(new Date());
-        long id = bookingRepository.save(bookingRecord).getId();
+        bookingRecord.setBookingDate(new Date());
+        Long id = bookingRepository.save(bookingRecord).getId();
         log.debug("Booking was saved");
         return id;
     }
@@ -99,7 +96,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void checkPrice(BookingRecordDTO bookingRecord) {
-        Price price = pricesClient.getPrice(bookingRecord.getBusNumber(), bookingRecord.getTripDate());
+        PriceDTO price = pricesClient.getPrice(bookingRecord.getBusNumber(), bookingRecord.getTripDate());
         log.debug("PriceDTO: {} ", price);
 
         if (!bookingRecord.getPrice().equals(price.getPriceAmount()))
@@ -107,14 +104,14 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingRecordDTO getBooking(long id) {
+    public BookingRecordDTO getBooking(Long id) {
         BookingRecord foundRecord = bookingRepository.findOne(id);
-        return mapperFacade.map(foundRecord, BookingRecordDTO.class);
+        return bookingRecordMapper.map(foundRecord, BookingRecordDTO.class);
     }
 
     @Transactional
     @Override
-    public void updateStatus(BookingStatus status, long bookingId) {
+    public void updateStatus(BookingStatus status, Long bookingId) {
         BookingRecord record = bookingRepository.findOne(bookingId);
         record.setStatus(status);
     }

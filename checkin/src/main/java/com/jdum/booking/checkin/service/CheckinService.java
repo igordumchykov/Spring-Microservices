@@ -8,7 +8,7 @@ import com.jdum.booking.common.dto.CheckInRecordDTO;
  */
 public interface CheckinService {
 
-    long checkIn(CheckInRecordDTO checkIn);
+    Long checkIn(CheckInRecordDTO checkIn);
 
-    CheckInRecordDTO getCheckInRecord(long id);
+    CheckInRecordDTO getCheckInRecord(Long id);
 }

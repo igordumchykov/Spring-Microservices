@@ -83,7 +83,7 @@ public class WebfaceController {
         passengers.add(passenger);
         booking.setPassengers(passengers);
 
-        long bookingId = bookClient.create(booking);
+        Long bookingId = bookClient.create(booking);
 
         model.addAttribute("message", "Your Booking is confirmed. Reference Number is " + bookingId);
         return "confirm";
@@ -102,7 +102,7 @@ public class WebfaceController {
     @RequestMapping(value = "/search-booking-get", method = RequestMethod.POST)
     public String searchBookingSubmit(@ModelAttribute UIData uiData, Model model) {
 
-        long id = Long.parseLong(uiData.getBookingId());
+        Long id = Long.parseLong(uiData.getBookingId());
         BookingRecordDTO booking = bookClient.getBookingRecord(id);
         TripDTO trip = new TripDTO(booking);
 
@@ -130,7 +130,7 @@ public class WebfaceController {
         CheckInRecordDTO checkIn = new CheckInRecordDTO(firstName, lastName, "28C", null,
                 busNumber, tripDate, new Long(bookingId));
 
-        long checkinId = checkinClient.create(checkIn);
+        Long checkinId = checkinClient.create(checkIn);
         model.addAttribute("message", "Checked In, Seat Number is 28c , checkin id is " + checkinId);
 
         return "checkinconfirm";

@@ -18,5 +18,5 @@ public interface BookClient {
     long create(BookingRecordDTO bookingRecord);
 
     @RequestMapping(method = RequestMethod.GET, value = "${client.booking.requests.get}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    BookingRecordDTO getBookingRecord(@PathVariable("id") long id);
+    BookingRecordDTO getBookingRecord(@PathVariable("id") Long id);
 }
