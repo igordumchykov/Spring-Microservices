@@ -1,7 +1,7 @@
 package com.jdum.booking.checkin.controller;
 
-import com.jdum.booking.checkin.model.CheckInRecord;
 import com.jdum.booking.checkin.service.CheckinService;
+import com.jdum.booking.common.dto.CheckInRecordDTO;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +17,12 @@ public class CheckInController {
     private CheckinService checkinService;
 
     @RequestMapping("/get/{id}")
-    public CheckInRecord getCheckIn(@PathVariable long id) {
+    public CheckInRecordDTO getCheckIn(@PathVariable long id) {
         return checkinService.getCheckInRecord(id);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public long checkIn(@RequestBody CheckInRecord checkIn) {
+    public long checkIn(@RequestBody CheckInRecordDTO checkIn) {
         return checkinService.checkIn(checkIn);
     }
 

@@ -18,6 +18,10 @@ import java.util.Map;
 @AllArgsConstructor
 public class Receiver {
 
+    private static String BUS_NUMBER_MSG = "BUS_NUMBER";
+    private static String TRIP_DATE_MSG = "TRIP_DATE";
+    private static String NEW_INVENTORY_MSG = "NEW_INVENTORY";
+
     @Autowired
     private SearchServiceImpl searchComponent;
 
@@ -27,9 +31,10 @@ public class Receiver {
     }
 
     @RabbitListener(queues = "SearchQ")
-    public void processMessage(Map<String, Object> fare) {
-        log.debug("Fare received: {}", fare);
-        //call repository and update the fare for the given flight
-        searchComponent.updateInventory((String) fare.get("FLIGHT_NUMBER"), (String) fare.get("FLIGHT_DATE"), (int) fare.get("NEW_INVENTORY"));
+    public void processMessage(Map<String, Object> price) {
+        log.debug("Price received: {}", price);
+        //call repository and update the priceAmount for the given trip
+        searchComponent.updateInventory((String) price.get(BUS_NUMBER_MSG),
+                (String) price.get(TRIP_DATE_MSG), (int) price.get(NEW_INVENTORY_MSG));
     }
 }

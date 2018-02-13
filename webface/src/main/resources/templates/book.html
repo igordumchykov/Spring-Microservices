@@ -23,32 +23,32 @@
      <tbody>
 		<tr>
 	   	 <td>
-		   	 <span th:text="${uidata.selectedFlight.flightNumber}"></span>
-		   	 <input type="hidden" th:field="${uidata.selectedFlight.flightNumber}"/>
+		   	 <span th:text="${uidata.selectedTrip.busNumber}"></span>
+		   	 <input type="hidden" th:field="${uidata.selectedTrip.busNumber}"/>
 	   	 </td>
 	  	 <td>
-	  	 	<span th:text="${uidata.selectedFlight.origin}"></span>
-	  		 <input type="hidden" th:field="${uidata.selectedFlight.origin}"/>
+	  	 	<span th:text="${uidata.selectedTrip.origin}"></span>
+	  		 <input type="hidden" th:field="${uidata.selectedTrip.origin}"/>
 	  	 </td>
 	  	 <td>
-	  	 	<span th:text="${uidata.selectedFlight.destination}"></span>
-	  	 	<input type="hidden" th:field="${uidata.selectedFlight.destination}"/>
+	  	 	<span th:text="${uidata.selectedTrip.destination}"></span>
+	  	 	<input type="hidden" th:field="${uidata.selectedTrip.destination}"/>
 	  	 </td>
 	  	 <td>
-	  		 <span th:text="${uidata.selectedFlight.flightDate}"></span>
-	  	 	<input type="hidden" th:field="${uidata.selectedFlight.flightDate}"/>
+	  		 <span th:text="${uidata.selectedTrip.tripDate}"></span>
+	  	 	<input type="hidden" th:field="${uidata.selectedTrip.tripDate}"/>
 	  	 </td>
 	  	 <td>
-	  	 	<span th:text="${uidata.selectedFlight.fares.fare}"></span>
-	  	 	<input type="hidden" th:field="${uidata.selectedFlight.fares.fare}"/>
+	  	 	<span th:text="${uidata.selectedTrip.price.priceAmount}"></span>
+	  	 	<input type="hidden" th:field="${uidata.selectedTrip.price.priceAmount}"/>
 	  	 </td>
 	 	</tr>
 	 	 </tbody>
 	</table>
 	</h3>
    	<table>
-    	  <tr> <td>First Name </td><td> <input type="text" th:field="${uidata.passenger.firstName}" /> </td></tr>	     
-	      <tr> <td>Last Name </td><td><input type="text" th:field="${uidata.passenger.lastName}" /></td></tr>	
+    	  <tr> <td>First Name </td><td> <input type="text" th:field="${uidata.passenger.firstName}" /> </td></tr>
+	      <tr> <td>Last Name </td><td><input type="text" th:field="${uidata.passenger.lastName}" /></td></tr>
 	      <tr> <td>Gender</td> 
 	      	<td>
 	      		<select th:field="${uidata.passenger.gender}" >

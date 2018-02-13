@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@Slf4j
 @Import(AppConfig.class)
 public class Search {
 

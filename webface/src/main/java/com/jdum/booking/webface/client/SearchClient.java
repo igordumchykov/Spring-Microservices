@@ -1,7 +1,7 @@
 package com.jdum.booking.webface.client;
 
-import com.jdum.booking.webface.dto.Flight;
-import com.jdum.booking.webface.dto.SearchQuery;
+import com.jdum.booking.common.dto.SearchQuery;
+import com.jdum.booking.common.dto.TripDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +13,9 @@ import java.util.List;
  * @author idumchykov
  * @since 1/24/18
  */
-@FeignClient(name = "apigateway")
+@FeignClient(name = "${client.search.service}")
 public interface SearchClient {
 
-    @RequestMapping(value = "/search/get", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    List<Flight> getFlights(SearchQuery searchQuery);
+    @RequestMapping(value = "${client.search.requests.get}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    List<TripDTO> getTrips(SearchQuery searchQuery);
 }

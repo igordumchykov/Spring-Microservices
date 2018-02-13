@@ -1,15 +1,17 @@
 package com.jdum.booking.book.service;
 
-import com.jdum.booking.book.model.BookingRecord;
+import com.jdum.booking.book.model.BookingStatus;
+import com.jdum.booking.common.dto.BookingRecordDTO;
 
 /**
  * @author idumchykov
  * @since 10/4/17
  */
 public interface BookingService {
-    long book(BookingRecord record);
 
-    BookingRecord getBooking(long id);
+    long book(BookingRecordDTO bookingRecord);
 
-    void updateStatus(String status, long bookingId);
+    BookingRecordDTO getBooking(long id);
+
+    void updateStatus(BookingStatus status, long bookingId);
 }

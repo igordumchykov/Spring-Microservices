@@ -1,6 +1,6 @@
 package com.jdum.booking.checkin.service;
 
-import com.jdum.booking.checkin.model.CheckInRecord;
+import com.jdum.booking.common.dto.CheckInRecordDTO;
 
 /**
  * @author idumchykov
@@ -8,7 +8,7 @@ import com.jdum.booking.checkin.model.CheckInRecord;
  */
 public interface CheckinService {
 
-    long checkIn(CheckInRecord checkIn);
+    long checkIn(CheckInRecordDTO checkIn);
 
-    CheckInRecord getCheckInRecord(long id);
+    CheckInRecordDTO getCheckInRecord(long id);
 }

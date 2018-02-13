@@ -1,9 +1,11 @@
 package com.jdum.booking.webface.controller;
 
+import com.google.common.collect.Iterables;
+import com.jdum.booking.common.dto.*;
 import com.jdum.booking.webface.client.BookClient;
 import com.jdum.booking.webface.client.CheckinClient;
 import com.jdum.booking.webface.client.SearchClient;
-import com.jdum.booking.webface.dto.*;
+import com.jdum.booking.webface.dto.UIData;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -27,6 +29,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class WebfaceController {
 
+    private static final String UIDATA_ATTRIBUTE = "uidata";
+
     @Autowired
     private CheckinClient checkinClient;
 
@@ -36,102 +40,99 @@ public class WebfaceController {
     @Autowired
     private BookClient bookClient;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String greetingForm(Model model) {
-        SearchQuery query = new SearchQuery("NYC", "SFO", "22-JAN-16");
-        UIData uiData = new UIData();
-        uiData.setSearchQuery(query);
-        model.addAttribute("uidata", uiData);
-        return "search";
-    }
-
     @HystrixCommand(fallbackMethod = "getError")
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String greetingSubmit(@ModelAttribute UIData uiData, Model model) {
-        List<Flight> flights = searchClient.getFlights(uiData.getSearchQuery());
-        uiData.setFlights(flights);
+
+        List<TripDTO> trips = searchClient.getTrips(uiData.getSearchQuery());
+        uiData.setTrips(trips);
+        model.addAttribute(UIDATA_ATTRIBUTE, uiData);
+
+        return "result";
+    }
+
+    public String getError(UIData uiData, Model model) {
+        uiData.setTrips(Collections.emptyList());
         model.addAttribute("uidata", uiData);
         return "result";
     }
 
-    public String getError(UIData uiData, Model model){
-        uiData.setFlights(Collections.emptyList());
-        model.addAttribute("uidata", uiData);
-        return "result";
-    }
+    @RequestMapping(value = "/book/{busNumber}/{origin}/{destination}/{tripDate}/{price}", method = RequestMethod.GET)
+    public String book(@PathVariable String busNumber,
+                       @PathVariable String origin,
+                       @PathVariable String destination,
+                       @PathVariable String tripDate,
+                       @PathVariable String price,
+                       Model model) {
 
-    @RequestMapping(value = "/book/{flightNumber}/{origin}/{destination}/{flightDate}/{fare}", method = RequestMethod.GET)
-    public String bookQuery(@PathVariable String flightNumber,
-                            @PathVariable String origin,
-                            @PathVariable String destination,
-                            @PathVariable String flightDate,
-                            @PathVariable String fare,
-                            Model model) {
-        UIData uiData = new UIData();
-        Flight flight = new Flight(flightNumber, origin, destination, flightDate, new Fares(fare, "AED"));
-        uiData.setSelectedFlight(flight);
-        uiData.setPassenger(new Passenger());
-        model.addAttribute("uidata", uiData);
+        TripDTO trip = new TripDTO(busNumber, origin, destination, tripDate, new PriceDTO(price, "AED"));
+        model.addAttribute(UIDATA_ATTRIBUTE, new UIData(trip, new PassengerDTO()));
+
         return "book";
     }
 
     @RequestMapping(value = "/confirm", method = RequestMethod.POST)
-    public String ConfirmBooking(@ModelAttribute UIData uiData, Model model) {
-        Flight flight = uiData.getSelectedFlight();
-        BookingRecord booking = new BookingRecord(flight.getFlightNumber(), flight.getOrigin(),
-                flight.getDestination(), flight.getFlightDate(), null,
-                flight.getFares().getFare());
-        Set<Passenger> passengers = new HashSet<>();
-        Passenger pax = uiData.getPassenger();
-        pax.setBookingRecord(booking);
-        passengers.add(uiData.getPassenger());
+    public String confirmBooking(@ModelAttribute UIData uiData, Model model) {
+
+        TripDTO trip = uiData.getSelectedTrip();
+        BookingRecordDTO booking = new BookingRecordDTO(trip);
+
+        Set<PassengerDTO> passengers = new HashSet<>();
+        PassengerDTO passenger = uiData.getPassenger();
+        passenger.setBookingRecord(booking);
+        passengers.add(passenger);
         booking.setPassengers(passengers);
+
         long bookingId = bookClient.create(booking);
+
         model.addAttribute("message", "Your Booking is confirmed. Reference Number is " + bookingId);
         return "confirm";
     }
 
     @RequestMapping(value = "/search-booking", method = RequestMethod.GET)
     public String searchBookingForm(Model model) {
+
         UIData uiData = new UIData();
-        uiData.setBookingid("5");
-        model.addAttribute("uidata", uiData);
+        uiData.setBookingId("5");//will be displayed
+        model.addAttribute(UIDATA_ATTRIBUTE, uiData);
+
         return "bookingsearch";
     }
 
     @RequestMapping(value = "/search-booking-get", method = RequestMethod.POST)
     public String searchBookingSubmit(@ModelAttribute UIData uiData, Model model) {
-        long id = Long.parseLong(uiData.getBookingid());
-        BookingRecord booking = bookClient.getBookingRecord(id);
-        Flight flight = new Flight(booking.getFlightNumber(), booking.getOrigin(), booking.getDestination()
-                , booking.getFlightDate(), new Fares(booking.getFare(), "AED"));
-        Passenger pax = booking.getPassengers().iterator().next();
-        Passenger paxUI = new Passenger(pax.getFirstName(), pax.getLastName(), pax.getGender(), null);
-        uiData.setPassenger(paxUI);
-        uiData.setSelectedFlight(flight);
-        uiData.setBookingid(String.valueOf(id));
-        model.addAttribute("uidata", uiData);
+
+        long id = Long.parseLong(uiData.getBookingId());
+        BookingRecordDTO booking = bookClient.getBookingRecord(id);
+        TripDTO trip = new TripDTO(booking);
+
+        PassengerDTO passenger = Iterables.getFirst(booking.getPassengers(), null);
+        uiData.setPassenger(passenger);
+        uiData.setSelectedTrip(trip);
+        uiData.setBookingId(String.valueOf(id));
+        model.addAttribute(UIDATA_ATTRIBUTE, uiData);
+
         return "bookingsearch";
     }
 
-    @RequestMapping(value = "/checkin/{flightNumber}/{origin}/{destination}/{flightDate}/{fare}/{firstName}/{lastName}/{gender}/{bookingid}", method = RequestMethod.GET)
-    public String bookQuery(@PathVariable String flightNumber,
+    @RequestMapping(value = "/checkin/{busNumber}/{origin}/{destination}/{tripDate}/{price}/{firstName}/{lastName}/{gender}/{bookingId}", method = RequestMethod.GET)
+    public String bookQuery(@PathVariable String busNumber,
                             @PathVariable String origin,
                             @PathVariable String destination,
-                            @PathVariable String flightDate,
-                            @PathVariable String fare,
+                            @PathVariable String tripDate,
+                            @PathVariable String price,
                             @PathVariable String firstName,
                             @PathVariable String lastName,
                             @PathVariable String gender,
-                            @PathVariable String bookingid,
+                            @PathVariable String bookingId,
                             Model model) {
 
-
-        CheckInRecord checkIn = new CheckInRecord(firstName, lastName, "28C", null,
-                flightDate, flightDate, new Long(bookingid));
+        CheckInRecordDTO checkIn = new CheckInRecordDTO(firstName, lastName, "28C", null,
+                busNumber, tripDate, new Long(bookingId));
 
         long checkinId = checkinClient.create(checkIn);
         model.addAttribute("message", "Checked In, Seat Number is 28c , checkin id is " + checkinId);
+
         return "checkinconfirm";
     }
 }

@@ -4,9 +4,11 @@ import com.jdum.booking.common.model.BaseEntity;
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
+@Table
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,8 +20,8 @@ public class CheckInRecord extends BaseEntity {
     private String firstName;
     private String seatNumber;
     private Date checkInTime;
-    private String flightNumber;
-    private String flightDate;
+    private String busNumber;
+    private String tripDate;
     private long bookingId;
 
 }

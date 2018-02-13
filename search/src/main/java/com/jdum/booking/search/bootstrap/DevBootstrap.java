@@ -1,12 +1,13 @@
 package com.jdum.booking.search.bootstrap;
 
-import com.jdum.booking.search.model.Fares;
-import com.jdum.booking.search.model.Flight;
+import com.jdum.booking.search.model.Price;
+import com.jdum.booking.search.model.Trip;
 import com.jdum.booking.search.model.Inventory;
-import com.jdum.booking.search.repository.FlightRepository;
+import com.jdum.booking.search.repository.PriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -16,25 +17,34 @@ import static com.google.common.collect.Lists.newArrayList;
  * @since 1/31/18
  */
 @Component
-public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
+@Profile("dev")
+public class DevBootstrap implements ApplicationListener<ApplicationReadyEvent> {
+
+    private static boolean eventReceived;
 
     @Autowired
-    private FlightRepository flightRepository;
+    private PriceRepository priceRepository;
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+    public void onApplicationEvent(ApplicationReadyEvent contextRefreshedEvent) {
         initDB();
     }
 
     private void initDB() {
-        flightRepository.save(newArrayList(
-                new Flight("BF100", "SEA", "SFO", "22-JAN-16", new Fares("100", "USD"), new Inventory(100)),
-                new Flight("BF101", "NYC", "SFO", "22-JAN-16", new Fares("101", "USD"), new Inventory(100)),
-                new Flight("BF105", "NYC", "SFO", "22-JAN-16", new Fares("105", "USD"), new Inventory(100)),
-                new Flight("BF106", "NYC", "SFO", "22-JAN-16", new Fares("106", "USD"), new Inventory(100)),
-                new Flight("BF102", "CHI", "SFO", "22-JAN-16", new Fares("102", "USD"), new Inventory(100)),
-                new Flight("BF103", "HOU", "SFO", "22-JAN-16", new Fares("103", "USD"), new Inventory(100)),
-                new Flight("BF104", "LAX", "SFO", "22-JAN-16", new Fares("104", "USD"), new Inventory(100))
+
+        if (eventReceived)
+            return;
+
+        eventReceived = true;
+
+        priceRepository.save(newArrayList(
+                new Trip("BF100", "SEA", "SFO", "22-JAN-16", new Price("100", "USD"), new Inventory(100)),
+                new Trip("BF101", "NYC", "SFO", "22-JAN-16", new Price("101", "USD"), new Inventory(100)),
+                new Trip("BF102", "CHI", "SFO", "22-JAN-16", new Price("102", "USD"), new Inventory(100)),
+                new Trip("BF103", "HOU", "SFO", "22-JAN-16", new Price("103", "USD"), new Inventory(100)),
+                new Trip("BF104", "LAX", "SFO", "22-JAN-16", new Price("104", "USD"), new Inventory(100)),
+                new Trip("BF105", "NYC", "SFO", "22-JAN-16", new Price("105", "USD"), new Inventory(100)),
+                new Trip("BF106", "NYC", "SFO", "22-JAN-16", new Price("106", "USD"), new Inventory(100))
         ));
     }
 }

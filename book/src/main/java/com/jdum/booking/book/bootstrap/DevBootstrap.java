@@ -3,8 +3,9 @@ package com.jdum.booking.book.bootstrap;
 import com.jdum.booking.book.model.Inventory;
 import com.jdum.booking.book.repository.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -14,17 +15,26 @@ import static com.google.common.collect.Lists.newArrayList;
  * @since 1/31/18
  */
 @Component
-public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
+@Profile("dev")
+public class DevBootstrap implements ApplicationListener<ApplicationReadyEvent> {
+
+    private static boolean eventReceived;
 
     @Autowired
     private InventoryRepository inventoryRepository;
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    public void onApplicationEvent(ApplicationReadyEvent event) {
         initDB();
     }
 
     private void initDB() {
+
+        if(eventReceived)
+            return;
+
+        eventReceived = true;
+
         inventoryRepository.save(newArrayList(
                 new Inventory("BF100", "22-JAN-16", 100),
                 new Inventory("BF101", "22-JAN-16", 100),

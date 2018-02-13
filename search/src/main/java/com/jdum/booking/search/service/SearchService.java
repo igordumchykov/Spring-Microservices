@@ -1,7 +1,7 @@
 package com.jdum.booking.search.service;
 
-import com.jdum.booking.search.model.Flight;
-import com.jdum.booking.search.dto.SearchQuery;
+import com.jdum.booking.common.dto.SearchQuery;
+import com.jdum.booking.common.dto.TripDTO;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * @since 10/4/17
  */
 public interface SearchService {
-    List<Flight> search(SearchQuery query);
+    List<TripDTO> search(SearchQuery query);
 
     void updateInventory(String flightNumber, String flightDate, int inventory);
 }
