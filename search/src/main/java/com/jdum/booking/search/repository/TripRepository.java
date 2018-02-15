@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PriceRepository extends JpaRepository<Trip, Long> {
+public interface TripRepository extends JpaRepository<Trip, Long> {
     List<Trip> findByOriginAndDestinationAndTripDate(String origin, String destination, String tripDate);
 
     Trip findByBusNumberAndTripDate(String busNumber, String tripDate);

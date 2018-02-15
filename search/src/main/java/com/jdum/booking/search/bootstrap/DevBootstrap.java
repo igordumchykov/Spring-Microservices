@@ -1,9 +1,9 @@
 package com.jdum.booking.search.bootstrap;
 
+import com.jdum.booking.search.model.Inventory;
 import com.jdum.booking.search.model.Price;
 import com.jdum.booking.search.model.Trip;
-import com.jdum.booking.search.model.Inventory;
-import com.jdum.booking.search.repository.PriceRepository;
+import com.jdum.booking.search.repository.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -23,7 +23,7 @@ public class DevBootstrap implements ApplicationListener<ApplicationReadyEvent> 
     private static boolean eventReceived;
 
     @Autowired
-    private PriceRepository priceRepository;
+    private TripRepository tripRepository;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent contextRefreshedEvent) {
@@ -37,7 +37,7 @@ public class DevBootstrap implements ApplicationListener<ApplicationReadyEvent> 
 
         eventReceived = true;
 
-        priceRepository.save(newArrayList(
+        tripRepository.save(newArrayList(
                 new Trip("BF100", "SEA", "SFO", "22-JAN-16", new Price("100", "USD"), new Inventory(100)),
                 new Trip("BF101", "NYC", "SFO", "22-JAN-16", new Price("101", "USD"), new Inventory(100)),
                 new Trip("BF102", "CHI", "SFO", "22-JAN-16", new Price("102", "USD"), new Inventory(100)),

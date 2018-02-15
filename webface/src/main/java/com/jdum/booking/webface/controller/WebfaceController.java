@@ -1,7 +1,10 @@
 package com.jdum.booking.webface.controller;
 
 import com.google.common.collect.Iterables;
-import com.jdum.booking.common.dto.*;
+import com.jdum.booking.common.dto.BookingRecordDTO;
+import com.jdum.booking.common.dto.CheckInRecordDTO;
+import com.jdum.booking.common.dto.PassengerDTO;
+import com.jdum.booking.common.dto.TripDTO;
 import com.jdum.booking.webface.client.BookClient;
 import com.jdum.booking.webface.client.CheckinClient;
 import com.jdum.booking.webface.client.SearchClient;
@@ -14,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -41,14 +43,14 @@ public class WebfaceController {
     private BookClient bookClient;
 
     @HystrixCommand(fallbackMethod = "getError")
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public String greetingSubmit(@ModelAttribute UIData uiData, Model model) {
+    @RequestMapping(value = "/trip/search", method = RequestMethod.POST)
+    public String searchTrip(@ModelAttribute UIData uiData, Model model) {
 
         List<TripDTO> trips = searchClient.getTrips(uiData.getSearchQuery());
         uiData.setTrips(trips);
         model.addAttribute(UIDATA_ATTRIBUTE, uiData);
 
-        return "result";
+        return "searchTripResult";
     }
 
     public String getError(UIData uiData, Model model) {
@@ -57,21 +59,13 @@ public class WebfaceController {
         return "result";
     }
 
-    @RequestMapping(value = "/book/{busNumber}/{origin}/{destination}/{tripDate}/{price}", method = RequestMethod.GET)
-    public String book(@PathVariable String busNumber,
-                       @PathVariable String origin,
-                       @PathVariable String destination,
-                       @PathVariable String tripDate,
-                       @PathVariable String price,
-                       Model model) {
-
-        TripDTO trip = new TripDTO(busNumber, origin, destination, tripDate, new PriceDTO(price, "AED"));
+    @RequestMapping(value = "/booking/book", method = RequestMethod.POST)
+    public String book(@ModelAttribute TripDTO trip, Model model) {
         model.addAttribute(UIDATA_ATTRIBUTE, new UIData(trip, new PassengerDTO()));
-
-        return "book";
+        return "bookInput";
     }
 
-    @RequestMapping(value = "/confirm", method = RequestMethod.POST)
+    @RequestMapping(value = "/booking/confirm", method = RequestMethod.POST)
     public String confirmBooking(@ModelAttribute UIData uiData, Model model) {
 
         TripDTO trip = uiData.getSelectedTrip();
@@ -86,21 +80,21 @@ public class WebfaceController {
         Long bookingId = bookClient.create(booking);
 
         model.addAttribute("message", "Your Booking is confirmed. Reference Number is " + bookingId);
-        return "confirm";
+        return "bookingConfirmation";
     }
 
-    @RequestMapping(value = "/search-booking", method = RequestMethod.GET)
-    public String searchBookingForm(Model model) {
+    @RequestMapping(value = "/booking/get", method = RequestMethod.GET)
+    public String searchBooking(Model model) {
 
         UIData uiData = new UIData();
         uiData.setBookingId("5");//will be displayed
         model.addAttribute(UIDATA_ATTRIBUTE, uiData);
 
-        return "bookingsearch";
+        return "bookingDetails";
     }
 
-    @RequestMapping(value = "/search-booking-get", method = RequestMethod.POST)
-    public String searchBookingSubmit(@ModelAttribute UIData uiData, Model model) {
+    @RequestMapping(value = "/booking/get/details", method = RequestMethod.POST)
+    public String getBooking(@ModelAttribute UIData uiData, Model model) {
 
         Long id = Long.parseLong(uiData.getBookingId());
         BookingRecordDTO booking = bookClient.getBookingRecord(id);
@@ -112,27 +106,16 @@ public class WebfaceController {
         uiData.setBookingId(String.valueOf(id));
         model.addAttribute(UIDATA_ATTRIBUTE, uiData);
 
-        return "bookingsearch";
+        return "bookingDetails";
     }
 
-    @RequestMapping(value = "/checkin/{busNumber}/{origin}/{destination}/{tripDate}/{price}/{firstName}/{lastName}/{gender}/{bookingId}", method = RequestMethod.GET)
-    public String bookQuery(@PathVariable String busNumber,
-                            @PathVariable String origin,
-                            @PathVariable String destination,
-                            @PathVariable String tripDate,
-                            @PathVariable String price,
-                            @PathVariable String firstName,
-                            @PathVariable String lastName,
-                            @PathVariable String gender,
-                            @PathVariable String bookingId,
-                            Model model) {
+    @RequestMapping(value = "/booking/checkin", method = RequestMethod.POST)
+    public String bookQuery(@ModelAttribute CheckInRecordDTO checkInRecordDTO, Model model) {
 
-        CheckInRecordDTO checkIn = new CheckInRecordDTO(firstName, lastName, "28C", null,
-                busNumber, tripDate, new Long(bookingId));
-
-        Long checkinId = checkinClient.create(checkIn);
+        checkInRecordDTO.setSeatNumber("28C");// TODO: 2/14/18 add logic to generate seat number automatically
+        Long checkinId = checkinClient.create(checkInRecordDTO);
         model.addAttribute("message", "Checked In, Seat Number is 28c , checkin id is " + checkinId);
 
-        return "checkinconfirm";
+        return "checkinConfirm";
     }
 }

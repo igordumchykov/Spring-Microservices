@@ -4,7 +4,7 @@ import com.jdum.booking.common.dto.SearchQuery;
 import com.jdum.booking.common.dto.TripDTO;
 import com.jdum.booking.search.model.Inventory;
 import com.jdum.booking.search.model.Trip;
-import com.jdum.booking.search.repository.PriceRepository;
+import com.jdum.booking.search.repository.TripRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,12 +28,12 @@ public class SearchServiceImpl implements SearchService {
     private MapperFacade mapperFacade;
 
     @Autowired
-    private PriceRepository priceRepository;
+    private TripRepository tripRepository;
 
     @Override
     public List<TripDTO> search(SearchQuery query) {
         log.debug("Search for: {}", query);
-        return ofNullable(priceRepository.findByOriginAndDestinationAndTripDate(query.getOrigin(), query.getDestination(), query.getTripDate()))
+        return ofNullable(tripRepository.findByOriginAndDestinationAndTripDate(query.getOrigin(), query.getDestination(), query.getTripDate()))
                 .map(trips -> trips.stream()
                         .filter(trip -> trip.getInventory().getCount() >= 0)
                         .map(trip -> mapperFacade.map(trip, TripDTO.class))
@@ -44,9 +44,9 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public void updateInventory(String busNumber, String tripDate, int inventory) {
         log.debug("Updating inventory for trip: {}, inventory: {} ", busNumber, inventory);
-        Trip trip = priceRepository.findByBusNumberAndTripDate(busNumber, tripDate);
+        Trip trip = tripRepository.findByBusNumberAndTripDate(busNumber, tripDate);
         Inventory inv = trip.getInventory();
         inv.setCount(inventory);
-        priceRepository.save(trip);
+        tripRepository.save(trip);
     }
 }

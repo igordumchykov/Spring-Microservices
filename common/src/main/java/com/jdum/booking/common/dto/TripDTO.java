@@ -23,4 +23,12 @@ public class TripDTO extends BaseDTO {
         tripDate = booking.getTripDate();
         price = new PriceDTO(booking.getPrice());
     }
+
+    public TripDTO(String busNumber, String origin, String destination, String tripDate, String price) {
+        this.busNumber = busNumber;
+        this.origin = origin;
+        this.destination = destination;
+        this.tripDate = tripDate;
+        this.price = new PriceDTO(price);
+    }
 }

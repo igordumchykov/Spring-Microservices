@@ -12,12 +12,12 @@
     <ul>
         <li>BrownField Airline</li>
         <li><a th:href="@{/}">Search</a></li>
-        <li><a th:href="@{/search-booking}">CheckIn</a></li>
+        <li><a th:href="@{/booking/get}">CheckIn</a></li>
     </ul>
 </nav>
 <div align="center" class="form-style-8">
     <h2>Flight Search</h2>
-    <form action="#" th:action="@{/search}" th:object="${uidata.searchQuery}" method="post">
+    <form action="#" th:action="@{/trip/search}" th:object="${uidata.searchQuery}" method="post">
         <table>
             <tr>
                 <td>From</td>

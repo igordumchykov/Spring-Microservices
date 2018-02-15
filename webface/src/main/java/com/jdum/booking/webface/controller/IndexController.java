@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class IndexController {
 
     private static final String UIDATA_ATTRIBUTE = "uidata";
+    private static final String SEARCH_VIEW = "search";
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(Model model) {

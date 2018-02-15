@@ -19,7 +19,7 @@
     <ul>
         <li>BrownField Airline</li>
         <li><a th:href="@{/}">Search</a></li>
-        <li><a th:href="@{/search-booking}">CheckIn</a></li>
+        <li><a th:href="@{/booking/get}">CheckIn</a></li>
     </ul>
 </nav>
 <div align="center" class="form-style-8">
@@ -39,7 +39,7 @@
         </thead>
 
         <tbody>
-        <tr th:each="trip : ${uidata.trips}">
+        <tr th:each="trip, iterStat : ${uidata.trips}">
             <td th:text="${trip.id}"/>
             <td th:text="${trip.busNumber}"/>
             <td th:text="${trip.origin}"/>
@@ -47,13 +47,15 @@
             <td th:text="${trip.tripDate}"/>
             <td th:text="${trip.price.priceAmount}"/>
             <td>
-                <a th:href="@{/book/{busNumber}/{origin}/{destination}/{tripDate}/{price}(
- 	 		 					busNumber=${trip.busNumber},
- 	 		 					origin=${trip.origin},
- 	 		 					destination=${trip.destination},
- 	 		 					tripDate=${trip.tripDate},
- 	 		 					price=${trip.price.priceAmount}
- 	 		 		        )}">Book</a>
+                <form action="#" th:action="@{/booking/book}" method="post">
+                    <input type="hidden" name="id" th:value="${trip.id}"/>
+                    <input type="hidden" name="busNumber" th:value="${trip.busNumber}"/>
+                    <input type="hidden" name="origin" th:value="${trip.origin}"/>
+                    <input type="hidden" name="destination" th:value="${trip.destination}"/>
+                    <input type="hidden" name="tripDate" th:value="${trip.tripDate}"/>
+                    <input type="hidden" name="price.priceAmount" th:value="${trip.price.priceAmount}"/>
+                    <button type="submit">book</button>
+                </form>
             </td>
         </tr>
         </tbody>
