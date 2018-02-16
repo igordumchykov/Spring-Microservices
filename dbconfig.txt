@@ -25,17 +25,27 @@ CREATE TABLE IF NOT EXISTS `booking_record` (
   `price`        VARCHAR(255)        DEFAULT NULL,
   `status`       VARCHAR(255)        DEFAULT NULL,
   `trip_date`    VARCHAR(255)        DEFAULT NULL,
+  `created_time` DATETIME            DEFAULT NULL,
+  `created_by`   VARCHAR(255)        DEFAULT NULL,
+  `enabled`      INT(11)             DEFAULT NULL,
+  `updated_time` DATETIME            DEFAULT NULL,
+  `updated_by`   VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE IF NOT EXISTS `passenger` (
-  `id`         BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(255)        DEFAULT NULL,
-  `gender`     VARCHAR(255)        DEFAULT NULL,
-  `last_name`  VARCHAR(255)        DEFAULT NULL,
-  `booking_id` BIGINT(20)          DEFAULT NULL,
+  `id`           BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `first_name`   VARCHAR(255)        DEFAULT NULL,
+  `gender`       VARCHAR(255)        DEFAULT NULL,
+  `last_name`    VARCHAR(255)        DEFAULT NULL,
+  `booking_id`   BIGINT(20)          DEFAULT NULL,
+  `created_time` DATETIME            DEFAULT NULL,
+  `created_by`   VARCHAR(255)        DEFAULT NULL,
+  `enabled`      INT(11)             DEFAULT NULL,
+  `updated_time` DATETIME            DEFAULT NULL,
+  `updated_by`   VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT FOREIGN KEY (`booking_id`) REFERENCES `booking_record` (`id`)
 )
@@ -43,10 +53,15 @@ CREATE TABLE IF NOT EXISTS `passenger` (
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE IF NOT EXISTS `inventory` (
-  `id`         BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `available`  INT(11)    NOT NULL,
-  `bus_number` VARCHAR(255)        DEFAULT NULL,
-  `trip_date`  VARCHAR(255)        DEFAULT NULL,
+  `id`           BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `available`    INT(11)    NOT NULL,
+  `bus_number`   VARCHAR(255)        DEFAULT NULL,
+  `trip_date`    VARCHAR(255)        DEFAULT NULL,
+  `created_time` DATETIME            DEFAULT NULL,
+  `created_by`   VARCHAR(255)        DEFAULT NULL,
+  `enabled`      INT(11)             DEFAULT NULL,
+  `updated_time` DATETIME            DEFAULT NULL,
+  `updated_by`   VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
@@ -61,6 +76,11 @@ CREATE TABLE IF NOT EXISTS `check_in_record` (
   `last_name`     VARCHAR(255)        DEFAULT NULL,
   `seat_number`   VARCHAR(255)        DEFAULT NULL,
   `trip_date`     VARCHAR(255)        DEFAULT NULL,
+  `created_time`  DATETIME            DEFAULT NULL,
+  `created_by`    VARCHAR(255)        DEFAULT NULL,
+  `enabled`       INT(11)             DEFAULT NULL,
+  `updated_time`  DATETIME            DEFAULT NULL,
+  `updated_by`    VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
@@ -71,14 +91,24 @@ CREATE TABLE IF NOT EXISTS `price` (
   `bus_number`   VARCHAR(255)        DEFAULT NULL,
   `price_amount` VARCHAR(255)        DEFAULT NULL,
   `trip_date`    VARCHAR(255)        DEFAULT NULL,
+  `created_time` DATETIME            DEFAULT NULL,
+  `created_by`   VARCHAR(255)        DEFAULT NULL,
+  `enabled`      INT(11)             DEFAULT NULL,
+  `updated_time` DATETIME            DEFAULT NULL,
+  `updated_by`   VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE IF NOT EXISTS `SEARCH_INVENTORY` (
-  `inv_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `count`  INT(11)             DEFAULT NULL,
+  `inv_id`       BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `count`        INT(11)             DEFAULT NULL,
+  `created_time` DATETIME            DEFAULT NULL,
+  `created_by`   VARCHAR(255)        DEFAULT NULL,
+  `enabled`      INT(11)             DEFAULT NULL,
+  `updated_time` DATETIME            DEFAULT NULL,
+  `updated_by`   VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`inv_id`)
 )
   ENGINE = InnoDB
@@ -88,25 +118,81 @@ CREATE TABLE IF NOT EXISTS `SEARCH_PRICE` (
   `price_id`     BIGINT(20) NOT NULL AUTO_INCREMENT,
   `currency`     VARCHAR(255)        DEFAULT NULL,
   `price_amount` VARCHAR(255)        DEFAULT NULL,
+  `created_time` DATETIME            DEFAULT NULL,
+  `created_by`   VARCHAR(255)        DEFAULT NULL,
+  `enabled`      INT(11)             DEFAULT NULL,
+  `updated_time` DATETIME            DEFAULT NULL,
+  `updated_by`   VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`price_id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE IF NOT EXISTS `SEARCH_TRIP` (
-  `id`          BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `bus_number`  VARCHAR(255)        DEFAULT NULL,
-  `destination` VARCHAR(255)        DEFAULT NULL,
-  `origin`      VARCHAR(255)        DEFAULT NULL,
-  `trip_date`   VARCHAR(255)        DEFAULT NULL,
-  `inv_id`      BIGINT(20)          DEFAULT NULL,
-  `price_id`    BIGINT(20)          DEFAULT NULL,
+  `id`           BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `bus_number`   VARCHAR(255)        DEFAULT NULL,
+  `destination`  VARCHAR(255)        DEFAULT NULL,
+  `origin`       VARCHAR(255)        DEFAULT NULL,
+  `trip_date`    VARCHAR(255)        DEFAULT NULL,
+  `inv_id`       BIGINT(20)          DEFAULT NULL,
+  `price_id`     BIGINT(20)          DEFAULT NULL,
+  `created_time` DATETIME            DEFAULT NULL,
+  `created_by`   VARCHAR(255)        DEFAULT NULL,
+  `enabled`      INT(11)             DEFAULT NULL,
+  `updated_time` DATETIME            DEFAULT NULL,
+  `updated_by`   VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT FOREIGN KEY (`inv_id`) REFERENCES `SEARCH_INVENTORY` (`inv_id`),
   CONSTRAINT FOREIGN KEY (`price_id`) REFERENCES `SEARCH_PRICE` (`price_id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+INSERT INTO price (id, bus_number, price_amount, trip_date, created_by, updated_by, created_time, updated_time, enabled) VALUES
+  (1, 'BF100', 100, '22-JAN-16', 'admin', 'admin', now(), now(), 1),
+  (2, 'BF101', 101, '22-JAN-16', 'admin', 'admin', now(), now(), 1),
+  (3, 'BF102', 102, '22-JAN-16', 'admin', 'admin', now(), now(), 1),
+  (4, 'BF103', 103, '22-JAN-16', 'admin', 'admin', now(), now(), 1),
+  (5, 'BF104', 104, '22-JAN-16', 'admin', 'admin', now(), now(), 1),
+  (6, 'BF105', 105, '22-JAN-16', 'admin', 'admin', now(), now(), 1),
+  (7, 'BF106', 106, '22-JAN-16', 'admin', 'admin', now(), now(), 1);
+
+INSERT INTO search_inventory (inv_id, count, created_by, updated_by, created_time, updated_time, enabled) VALUES
+  (1, 100, 'admin', 'admin', now(), now(), 1),
+  (2, 100, 'admin', 'admin', now(), now(), 1),
+  (3, 100, 'admin', 'admin', now(), now(), 1),
+  (4, 100, 'admin', 'admin', now(), now(), 1),
+  (5, 100, 'admin', 'admin', now(), now(), 1),
+  (6, 100, 'admin', 'admin', now(), now(), 1),
+  (7, 100, 'admin', 'admin', now(), now(), 1);
+
+INSERT INTO search_price (price_id, currency, price_amount, created_by, updated_by, created_time, updated_time, enabled) VALUES
+  (1, 'USD', 100, 'admin', 'admin', now(), now(), 1),
+  (2, 'USD', 101, 'admin', 'admin', now(), now(), 1),
+  (3, 'USD', 102, 'admin', 'admin', now(), now(), 1),
+  (4, 'USD', 103, 'admin', 'admin', now(), now(), 1),
+  (5, 'USD', 104, 'admin', 'admin', now(), now(), 1),
+  (6, 'USD', 105, 'admin', 'admin', now(), now(), 1),
+  (7, 'USD', 106, 'admin', 'admin', now(), now(), 1);
+
+INSERT INTO search_trip (id, bus_number, destination, origin, trip_date, inv_id, price_id, created_by, updated_by, created_time, updated_time, enabled) VALUES
+  (1, 'BF100', 'SFO', 'SEA', '22-JAN-16', 1, 1, 'admin', 'admin', now(), now(), 1),
+  (2, 'BF101', 'SFO', 'NYC', '22-JAN-16', 2, 2, 'admin', 'admin', now(), now(), 1),
+  (3, 'BF102', 'SFO', 'CHI', '22-JAN-16', 3, 3, 'admin', 'admin', now(), now(), 1),
+  (4, 'BF103', 'SFO', 'HOU', '22-JAN-16', 4, 4, 'admin', 'admin', now(), now(), 1),
+  (5, 'BF104', 'SFO', 'LAX', '22-JAN-16', 5, 5, 'admin', 'admin', now(), now(), 1),
+  (6, 'BF105', 'SFO', 'NYC', '22-JAN-16', 6, 6, 'admin', 'admin', now(), now(), 1),
+  (7, 'BF106', 'SFO', 'NYC', '22-JAN-16', 7, 7, 'admin', 'admin', now(), now(), 1);
+
+INSERT INTO inventory (id, bus_number, trip_date, available, created_by, updated_by, created_time, updated_time, enabled)
+VALUES
+  (1, 'BF100', '22-JAN-16', 100, 'admin', 'admin', now(), now(), 1),
+  (2, 'BF101', '22-JAN-16', 100, 'admin', 'admin', now(), now(), 1),
+  (3, 'BF102', '22-JAN-16', 100, 'admin', 'admin', now(), now(), 1),
+  (4, 'BF103', '22-JAN-16', 100, 'admin', 'admin', now(), now(), 1),
+  (5, 'BF104', '22-JAN-16', 100, 'admin', 'admin', now(), now(), 1),
+  (6, 'BF105', '22-JAN-16', 100, 'admin', 'admin', now(), now(), 1),
+  (7, 'BF106', '22-JAN-16', 100, 'admin', 'admin', now(), now(), 1);
 
 #create user qa and give him privileges:
 CREATE USER 'booking_qa_1'@'localhost' IDENTIFIED BY 'booking_qa_1#1';

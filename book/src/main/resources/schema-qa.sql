@@ -11,6 +11,11 @@ CREATE TABLE IF NOT EXISTS `booking_record` (
   `price`        VARCHAR(255)        DEFAULT NULL,
   `status`       VARCHAR(255)        DEFAULT NULL,
   `trip_date`    VARCHAR(255)        DEFAULT NULL,
+  `created_time`      DATETIME            DEFAULT NULL,
+  `created_by`   VARCHAR(255)        DEFAULT NULL,
+  `enabled`      INT(11)             DEFAULT NULL,
+  `updated_time`      DATETIME            DEFAULT NULL,
+  `updated_by`   VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
@@ -22,6 +27,11 @@ CREATE TABLE IF NOT EXISTS `passenger` (
   `gender`     VARCHAR(255)        DEFAULT NULL,
   `last_name`  VARCHAR(255)        DEFAULT NULL,
   `booking_id` BIGINT(20)          DEFAULT NULL,
+  `created_time`    DATETIME            DEFAULT NULL,
+  `created_by` VARCHAR(255)        DEFAULT NULL,
+  `enabled`    INT(11)             DEFAULT NULL,
+  `updated_time`    DATETIME            DEFAULT NULL,
+  `updated_by` VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT FOREIGN KEY (`booking_id`) REFERENCES `booking_record` (`id`)
 )
@@ -33,6 +43,11 @@ CREATE TABLE IF NOT EXISTS `inventory` (
   `available`  INT(11)    NOT NULL,
   `bus_number` VARCHAR(255)        DEFAULT NULL,
   `trip_date`  VARCHAR(255)        DEFAULT NULL,
+  `created_time`    DATETIME            DEFAULT NULL,
+  `created_by` VARCHAR(255)        DEFAULT NULL,
+  `enabled`    INT(11)             DEFAULT NULL,
+  `updated_time`    DATETIME            DEFAULT NULL,
+  `updated_by` VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB

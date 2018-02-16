@@ -19,7 +19,7 @@ public class Receiver {
     private BookingService bookingService;
 
     @RabbitListener(queues = "CheckINQ")
-    public void processMessage(long bookingID) {
+    public void processMessage(Long bookingID) {
         log.debug("Booking id received: {}", bookingID);
         bookingService.updateStatus(BookingStatus.CHECKED_IN, bookingID);
     }

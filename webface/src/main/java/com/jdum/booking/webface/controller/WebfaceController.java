@@ -9,7 +9,6 @@ import com.jdum.booking.webface.client.BookClient;
 import com.jdum.booking.webface.client.CheckinClient;
 import com.jdum.booking.webface.client.SearchClient;
 import com.jdum.booking.webface.dto.UIData;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +19,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import static com.google.common.collect.Sets.newHashSet;
 
 @Controller
 @Slf4j
@@ -31,7 +29,17 @@ import java.util.Set;
 @AllArgsConstructor
 public class WebfaceController {
 
-    private static final String UIDATA_ATTRIBUTE = "uidata";
+    static final String UIDATA_ATTRIBUTE = "uiData";
+    static final String TRIP_ATTRIBUTE = "trip";
+    static final String CHECK_IN_ATTRIBUTE = "checkIn";
+
+    static final String SEARCH_TRIP_RESULT_VIEW = "searchTripResult";
+    static final String BOOKING_INPUT_VIEW = "bookInput";
+    static final String BOOKING_CONFIRMATION_VIEW = "bookingConfirmation";
+    static final String BOOKING_DETAILS_VIEW = "bookingDetails";
+    static final String CHECK_IN_CONFIRM_VIEW = "checkinConfirm";
+    static final String MESSAGE_ATTRIBUTE = "message";
+
 
     @Autowired
     private CheckinClient checkinClient;
@@ -42,59 +50,52 @@ public class WebfaceController {
     @Autowired
     private BookClient bookClient;
 
-    @HystrixCommand(fallbackMethod = "getError")
+    //Handles error using circuit breaker
+//    @HystrixCommand(fallbackMethod = "getError")
     @RequestMapping(value = "/trip/search", method = RequestMethod.POST)
-    public String searchTrip(@ModelAttribute UIData uiData, Model model) {
+    public String searchTrip(@ModelAttribute(UIDATA_ATTRIBUTE) UIData uiData, Model model) {
 
         List<TripDTO> trips = searchClient.getTrips(uiData.getSearchQuery());
         uiData.setTrips(trips);
         model.addAttribute(UIDATA_ATTRIBUTE, uiData);
 
-        return "searchTripResult";
-    }
-
-    public String getError(UIData uiData, Model model) {
-        uiData.setTrips(Collections.emptyList());
-        model.addAttribute("uidata", uiData);
-        return "searchTripResult";
+        return SEARCH_TRIP_RESULT_VIEW;
     }
 
     @RequestMapping(value = "/booking/book", method = RequestMethod.POST)
-    public String book(@ModelAttribute TripDTO trip, Model model) {
+    public String book(@ModelAttribute(TRIP_ATTRIBUTE) TripDTO trip, Model model) {
         model.addAttribute(UIDATA_ATTRIBUTE, new UIData(trip, new PassengerDTO()));
-        return "bookInput";
+        return BOOKING_INPUT_VIEW;
     }
 
     @RequestMapping(value = "/booking/confirm", method = RequestMethod.POST)
-    public String confirmBooking(@ModelAttribute UIData uiData, Model model) {
+    public String confirmBooking(@ModelAttribute(UIDATA_ATTRIBUTE) UIData uiData, Model model) {
 
         TripDTO trip = uiData.getSelectedTrip();
         BookingRecordDTO booking = new BookingRecordDTO(trip);
 
-        Set<PassengerDTO> passengers = new HashSet<>();
         PassengerDTO passenger = uiData.getPassenger();
         passenger.setBookingRecord(booking);
-        passengers.add(passenger);
-        booking.setPassengers(passengers);
+        booking.setPassengers(newHashSet(passenger));
 
         Long bookingId = bookClient.create(booking);
 
-        model.addAttribute("message", "Your Booking is confirmed. Reference Number is " + bookingId);
-        return "bookingConfirmation";
+        model.addAttribute(MESSAGE_ATTRIBUTE, "Your Booking is confirmed. Reference Number is " + bookingId);
+        return BOOKING_CONFIRMATION_VIEW;
     }
 
     @RequestMapping(value = "/booking/get", method = RequestMethod.GET)
     public String searchBooking(Model model) {
 
-        UIData uiData = new UIData();
-        uiData.setBookingId("5");//will be displayed
-        model.addAttribute(UIDATA_ATTRIBUTE, uiData);
+        UIData UIData = new UIData();
+        UIData.setBookingId("5");//will be displayed
+        model.addAttribute(UIDATA_ATTRIBUTE, UIData);
 
-        return "bookingDetails";
+        return BOOKING_DETAILS_VIEW;
     }
 
     @RequestMapping(value = "/booking/get/details", method = RequestMethod.POST)
-    public String getBooking(@ModelAttribute UIData uiData, Model model) {
+    public String getBookingDetails(@ModelAttribute(UIDATA_ATTRIBUTE) UIData uiData, Model model) {
 
         Long id = Long.parseLong(uiData.getBookingId());
         BookingRecordDTO booking = bookClient.getBookingRecord(id);
@@ -106,16 +107,16 @@ public class WebfaceController {
         uiData.setBookingId(String.valueOf(id));
         model.addAttribute(UIDATA_ATTRIBUTE, uiData);
 
-        return "bookingDetails";
+        return BOOKING_DETAILS_VIEW;
     }
 
-    @RequestMapping(value = "/booking/checkin", method = RequestMethod.POST)
-    public String bookQuery(@ModelAttribute CheckInRecordDTO checkInRecordDTO, Model model) {
+    @RequestMapping(value = "/booking/checkIn", method = RequestMethod.POST)
+    public String checkInBookingRecord(@ModelAttribute(CHECK_IN_ATTRIBUTE) CheckInRecordDTO checkIn, Model model) {
 
-        checkInRecordDTO.setSeatNumber("28C");// TODO: 2/14/18 add logic to generate seat number automatically
-        Long checkinId = checkinClient.create(checkInRecordDTO);
-        model.addAttribute("message", "Checked In, Seat Number is 28c , checkin id is " + checkinId);
+        checkIn.setSeatNumber("28C");// TODO: 2/14/18 add logic to generate seat number automatically
+        Long checkInId = checkinClient.create(checkIn);
+        model.addAttribute(MESSAGE_ATTRIBUTE, "Checked In, Seat Number is 28c , check in id is " + checkInId);
 
-        return "checkinConfirm";
+        return CHECK_IN_CONFIRM_VIEW;
     }
 }

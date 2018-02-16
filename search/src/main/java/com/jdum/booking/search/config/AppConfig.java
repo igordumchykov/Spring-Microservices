@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 
-    //indicate that the span ID has to be created every time a call hits the service
+    //indicate that the span ID has to be createdTime every time a call hits the service
     @Bean
     public AlwaysSampler defaultSampler(){
         return new AlwaysSampler();

@@ -1,15 +1,14 @@
 package com.jdum.booking.common.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 import java.util.Set;
 
 
 @Data
+@Accessors(chain = true)
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

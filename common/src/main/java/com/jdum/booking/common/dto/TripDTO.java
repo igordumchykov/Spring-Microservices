@@ -4,6 +4,7 @@ package com.jdum.booking.common.dto;
 import lombok.*;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -22,13 +23,5 @@ public class TripDTO extends BaseDTO {
         destination = booking.getDestination();
         tripDate = booking.getTripDate();
         price = new PriceDTO(booking.getPrice());
-    }
-
-    public TripDTO(String busNumber, String origin, String destination, String tripDate, String price) {
-        this.busNumber = busNumber;
-        this.origin = origin;
-        this.destination = destination;
-        this.tripDate = tripDate;
-        this.price = new PriceDTO(price);
     }
 }

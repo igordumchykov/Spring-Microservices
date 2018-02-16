@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class IndexController {
 
-    private static final String UIDATA_ATTRIBUTE = "uidata";
-    private static final String SEARCH_VIEW = "search";
+    static final String UIDATA_ATTRIBUTE = "uiData";
+    static final String SEARCH_VIEW = "search";
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(Model model) {
         model.addAttribute(UIDATA_ATTRIBUTE, new UIData(SearchQuery.getDefault()));
-        return "search";
+        return SEARCH_VIEW;
     }
 }

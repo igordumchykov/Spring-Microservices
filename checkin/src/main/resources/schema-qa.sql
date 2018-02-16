@@ -9,6 +9,11 @@ CREATE TABLE IF NOT EXISTS `check_in_record` (
   `last_name`     VARCHAR(255)        DEFAULT NULL,
   `seat_number`   VARCHAR(255)        DEFAULT NULL,
   `trip_date`     VARCHAR(255)        DEFAULT NULL,
+  `created_time`  DATETIME            DEFAULT NULL,
+  `created_by`    VARCHAR(255)        DEFAULT NULL,
+  `enabled`       INT(11)             DEFAULT NULL,
+  `updated_time`  DATETIME            DEFAULT NULL,
+  `updated_by`    VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB

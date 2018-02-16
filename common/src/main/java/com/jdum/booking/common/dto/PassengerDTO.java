@@ -6,11 +6,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "bookingRecord")
+@ToString(callSuper = true, exclude = "bookingRecord")
 public class PassengerDTO extends BaseDTO {
 
     private String firstName;

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface BookClient {
 
     @RequestMapping(method = RequestMethod.POST, value = "${client.booking.requests.create}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    long create(BookingRecordDTO bookingRecord);
+    Long create(BookingRecordDTO bookingRecord);
 
     @RequestMapping(method = RequestMethod.GET, value = "${client.booking.requests.get}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     BookingRecordDTO getBookingRecord(@PathVariable("id") Long id);

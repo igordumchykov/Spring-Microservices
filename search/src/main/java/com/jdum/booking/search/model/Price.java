@@ -1,20 +1,21 @@
 package com.jdum.booking.search.model;
 
+import com.jdum.booking.common.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "SEARCH_PRICE")
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode
-@ToString
-public class Price implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@AttributeOverride(name = "id", column = @Column(name = "PRICE_ID"))
+public class Price extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

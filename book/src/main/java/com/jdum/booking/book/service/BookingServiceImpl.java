@@ -53,7 +53,7 @@ public class BookingServiceImpl implements BookingService {
         Inventory inventory = getInventory(bookingRecord);
 
         inventoryRepository.saveAndFlush(inventory);
-        log.debug("Inventory was updated");
+        log.debug("Inventory was updatedTime");
 
         Long id = saveBooking(bookingRecord);
 
@@ -72,7 +72,7 @@ public class BookingServiceImpl implements BookingService {
         log.debug("booking event successfully delivered: {}", bookingDetails);
     }
 
-    private long saveBooking(BookingRecordDTO bookingRecordDTO) {
+    private Long saveBooking(BookingRecordDTO bookingRecordDTO) {
 
         BookingRecord bookingRecord = bookingRecordMapper.map(bookingRecordDTO, BookingRecord.class);
         bookingRecord.setStatus(BookingStatus.BOOKING_CONFIRMED);

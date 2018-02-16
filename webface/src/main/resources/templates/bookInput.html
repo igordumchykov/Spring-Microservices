@@ -16,30 +16,30 @@
 </nav>
 <div align="center" class="form-style-8">
     <h2>Selected Flight</h2>
-    <form action="#" th:action="@{/booking/confirm}" th:object="${uidata}" method="post">
+    <form action="#" th:action="@{/booking/confirm}" th:object="${uiData}" method="post">
         <h3>
             <table>
                 <tbody>
                 <tr>
                     <td>
-                        <span th:text="${uidata.selectedTrip.busNumber}"></span>
-                        <input type="hidden" th:field="${uidata.selectedTrip.busNumber}"/>
+                        <span th:text="${uiData.selectedTrip.busNumber}"></span>
+                        <input type="hidden" th:field="${uiData.selectedTrip.busNumber}"/>
                     </td>
                     <td>
-                        <span th:text="${uidata.selectedTrip.origin}"></span>
-                        <input type="hidden" th:field="${uidata.selectedTrip.origin}"/>
+                        <span th:text="${uiData.selectedTrip.origin}"></span>
+                        <input type="hidden" th:field="${uiData.selectedTrip.origin}"/>
                     </td>
                     <td>
-                        <span th:text="${uidata.selectedTrip.destination}"></span>
-                        <input type="hidden" th:field="${uidata.selectedTrip.destination}"/>
+                        <span th:text="${uiData.selectedTrip.destination}"></span>
+                        <input type="hidden" th:field="${uiData.selectedTrip.destination}"/>
                     </td>
                     <td>
-                        <span th:text="${uidata.selectedTrip.tripDate}"></span>
-                        <input type="hidden" th:field="${uidata.selectedTrip.tripDate}"/>
+                        <span th:text="${uiData.selectedTrip.tripDate}"></span>
+                        <input type="hidden" th:field="${uiData.selectedTrip.tripDate}"/>
                     </td>
                     <td>
-                        <span th:text="${uidata.selectedTrip.price.priceAmount}"></span>
-                        <input type="hidden" th:field="${uidata.selectedTrip.price.priceAmount}"/>
+                        <span th:text="${uiData.selectedTrip.price.priceAmount}"></span>
+                        <input type="hidden" th:field="${uiData.selectedTrip.price.priceAmount}"/>
                     </td>
                 </tr>
                 </tbody>
@@ -48,16 +48,16 @@
         <table>
             <tr>
                 <td>First Name</td>
-                <td><input type="text" th:field="${uidata.passenger.firstName}"/></td>
+                <td><input type="text" th:field="${uiData.passenger.firstName}"/></td>
             </tr>
             <tr>
                 <td>Last Name</td>
-                <td><input type="text" th:field="${uidata.passenger.lastName}"/></td>
+                <td><input type="text" th:field="${uiData.passenger.lastName}"/></td>
             </tr>
             <tr>
                 <td>Gender</td>
                 <td>
-                    <select th:field="${uidata.passenger.gender}">
+                    <select th:field="${uiData.passenger.gender}">
                         <option value="MALE">Male</option>
                         <option value="FEMALE">Female</option>
                     </select>

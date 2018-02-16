@@ -15,21 +15,14 @@ public class BookingController {
     private BookingService bookingService;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public long book(@RequestBody BookingRecordDTO bookingRecord) {
+    public Long book(@RequestBody BookingRecordDTO bookingRecord) {
         log.debug("Create booking: {} ", bookingRecord);
         return bookingService.book(bookingRecord);
     }
 
     @RequestMapping("/get/{id}")
-    public BookingRecordDTO getBooking(@PathVariable long id) {
+    public BookingRecordDTO getBooking(@PathVariable Long id) {
         log.debug("Get booking for id: {} ", id);
         return bookingService.getBooking(id);
-    }
-
-    @RequestMapping("/test/{id}")
-    public BookingRecordDTO test(@PathVariable long id) {
-        BookingRecordDTO booking = getBooking(id);
-        System.out.println(booking);
-        return booking;
     }
 }

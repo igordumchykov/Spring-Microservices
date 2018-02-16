@@ -5,10 +5,12 @@ import com.jdum.booking.common.dto.SearchQuery;
 import com.jdum.booking.common.dto.TripDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
 @Data
+@Accessors(chain = true)
 @NoArgsConstructor
 public class UIData {
     private SearchQuery searchQuery;
