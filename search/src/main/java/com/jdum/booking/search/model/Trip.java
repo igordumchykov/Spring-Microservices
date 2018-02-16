@@ -3,12 +3,10 @@ package com.jdum.booking.search.model;
 import com.jdum.booking.common.model.BaseEntity;
 import lombok.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "SEARCH_TRIP")
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
@@ -16,17 +14,24 @@ import javax.persistence.OneToOne;
 @AllArgsConstructor
 public class Trip extends BaseEntity {
 
+    @Column(name = "BUS_NUMBER")
     private String busNumber;
+
+    @Column(name = "ORIGIN")
     private String origin;
+
+    @Column(name = "DESTINATION")
     private String destination;
+
+    @Column(name = "TRIP_DATE")
     private String tripDate;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "price_id")
+    @JoinColumn(name = "PRICE_ID")
     private Price price;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "inv_id")
+    @JoinColumn(name = "INV_ID")
     private Inventory inventory;
 
 }

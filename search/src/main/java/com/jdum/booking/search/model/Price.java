@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@Table(name = "SEARCH_PRICE")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -16,11 +17,14 @@ import java.io.Serializable;
 public class Price implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "price_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "PRICE_ID")
     private Long id;
 
+    @Column(name = "PRICE_AMOUNT")
     private String priceAmount;
+
+    @Column(name = "CURRENCY")
     private String currency;
 
     public Price(String priceAmount, String currency) {

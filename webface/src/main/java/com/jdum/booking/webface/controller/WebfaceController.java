@@ -56,7 +56,7 @@ public class WebfaceController {
     public String getError(UIData uiData, Model model) {
         uiData.setTrips(Collections.emptyList());
         model.addAttribute("uidata", uiData);
-        return "result";
+        return "searchTripResult";
     }
 
     @RequestMapping(value = "/booking/book", method = RequestMethod.POST)

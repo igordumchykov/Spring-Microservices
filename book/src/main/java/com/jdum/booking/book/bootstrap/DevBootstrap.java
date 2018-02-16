@@ -15,7 +15,7 @@ import static com.google.common.collect.Lists.newArrayList;
  * @since 1/31/18
  */
 @Component
-@Profile("dev")
+@Profile({"dev"})
 public class DevBootstrap implements ApplicationListener<ApplicationReadyEvent> {
 
     private static boolean eventReceived;

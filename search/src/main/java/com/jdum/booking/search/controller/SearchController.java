@@ -24,6 +24,7 @@ class SearchController {
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     public List<TripDTO> search(@RequestBody SearchQuery query) {
         log.debug("Input: {}", query);
+        List<TripDTO> search = searchService.search(query);
         return searchService.search(query);
     }
 

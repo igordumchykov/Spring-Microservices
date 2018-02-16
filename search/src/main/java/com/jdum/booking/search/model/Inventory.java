@@ -5,25 +5,23 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
+@Table(name = "SEARCH_INVENTORY")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Inventory {
+public class Inventory implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "inv_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "INV_ID")
     private Long id;
 
+    @Column(name = "COUNT")
     private int count;
 
     public Inventory(int count) {

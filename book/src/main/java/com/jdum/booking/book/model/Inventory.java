@@ -3,11 +3,12 @@ package com.jdum.booking.book.model;
 import com.jdum.booking.common.model.BaseEntity;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table
+@Table(name = "INVENTORY")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -15,8 +16,13 @@ import javax.persistence.Table;
 @NoArgsConstructor
 public class Inventory extends BaseEntity {
 
+    @Column(name = "BUS_NUMBER")
     private String busNumber;
+
+    @Column(name = "TRIP_DATE")
     private String tripDate;
+
+    @Column(name = "AVAILABLE")
     private int available;
 
     public boolean isAvailable(int count) {
