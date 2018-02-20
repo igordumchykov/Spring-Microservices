@@ -14,13 +14,13 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @PostMapping("/create")
     public Long book(@RequestBody BookingRecordDTO bookingRecord) {
         log.debug("Create booking: {} ", bookingRecord);
         return bookingService.book(bookingRecord);
     }
 
-    @RequestMapping("/get/{id}")
+    @GetMapping("/get/{id}")
     public BookingRecordDTO getBooking(@PathVariable Long id) {
         log.debug("Get booking for id: {} ", id);
         return bookingService.getBooking(id);

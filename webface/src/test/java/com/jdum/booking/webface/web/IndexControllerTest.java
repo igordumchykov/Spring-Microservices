@@ -1,4 +1,4 @@
-package com.jdum.booking.webface.controller;
+package com.jdum.booking.webface.web;
 
 import com.jdum.booking.common.dto.SearchQuery;
 import com.jdum.booking.webface.dto.UIData;
@@ -9,8 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.jdum.booking.webface.controller.IndexController.SEARCH_VIEW;
-import static com.jdum.booking.webface.controller.IndexController.UIDATA_ATTRIBUTE;
+import static com.jdum.booking.webface.web.IndexController.SEARCH_VIEW;
+import static com.jdum.booking.webface.web.IndexController.UIDATA_ATTRIBUTE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

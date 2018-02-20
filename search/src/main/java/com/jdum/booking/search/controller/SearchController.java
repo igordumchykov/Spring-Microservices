@@ -2,29 +2,28 @@ package com.jdum.booking.search.controller;
 
 import com.jdum.booking.common.dto.SearchQuery;
 import com.jdum.booking.common.dto.TripDTO;
+import com.jdum.booking.common.exceptions.NotFoundException;
 import com.jdum.booking.search.service.SearchService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
 @RestController
 @Slf4j
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 class SearchController {
 
     @Autowired
     private SearchService searchService;
 
-    @RequestMapping(value = "/get", method = RequestMethod.POST)
-    public List<TripDTO> search(@RequestBody SearchQuery query) {
+    @PostMapping("/get")
+    public List<TripDTO> search(@Valid @RequestBody SearchQuery query) throws NotFoundException {
         log.debug("Input: {}", query);
-        List<TripDTO> search = searchService.search(query);
         return searchService.search(query);
     }
 

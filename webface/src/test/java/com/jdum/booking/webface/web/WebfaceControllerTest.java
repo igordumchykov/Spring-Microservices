@@ -1,6 +1,9 @@
-package com.jdum.booking.webface.controller;
+package com.jdum.booking.webface.web;
 
 import com.jdum.booking.common.dto.*;
+import com.jdum.booking.webface.exceptions.ExceptionHandlerController;
+import com.jdum.booking.common.exceptions.NotFoundException;
+import com.jdum.booking.common.rest.RestConstants;
 import com.jdum.booking.webface.client.BookClient;
 import com.jdum.booking.webface.client.CheckinClient;
 import com.jdum.booking.webface.client.SearchClient;
@@ -19,7 +22,7 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
-import static com.jdum.booking.webface.controller.WebfaceController.*;
+import static com.jdum.booking.webface.web.WebfaceController.*;
 import static java.util.Optional.ofNullable;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -33,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SuppressWarnings("FieldCanBeLocal")
 @RunWith(SpringRunner.class)
-@WebMvcTest(WebfaceController.class)
+@WebMvcTest(controllers = {WebfaceController.class, ExceptionHandlerController.class})
 public class WebfaceControllerTest {
 
     private static String FIRST_NAME = "TestName";
@@ -74,6 +77,19 @@ public class WebfaceControllerTest {
                 .andExpect(model().attribute(UIDATA_ATTRIBUTE,
                         new UIData(SearchQuery.getDefault())
                                 .setTrips(trips)));
+    }
+
+    @Test
+    public void shouldReturn404IfTripsNotFound() throws Exception {
+
+        //noinspection unchecked
+        when(searchClient.getTrips(any(SearchQuery.class))).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(post("/trip/search")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .flashAttr(UIDATA_ATTRIBUTE, new UIData(SearchQuery.getDefault())))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(RestConstants.NOT_FOUND_VIEW_NAME));
     }
 
     @Test

@@ -9,7 +9,7 @@ import org.mockito.Mock;
  * @author idumchykov
  * @since 2/14/18
  */
-public class SearchServiceImplTest {
+public class SearchServiceTest {
 
     @InjectMocks
     private SearchServiceImpl searchService;

@@ -2,26 +2,24 @@ package com.jdum.booking.search.service;
 
 import com.jdum.booking.common.dto.SearchQuery;
 import com.jdum.booking.common.dto.TripDTO;
+import com.jdum.booking.common.exceptions.NotFoundException;
 import com.jdum.booking.search.model.Inventory;
 import com.jdum.booking.search.model.Trip;
 import com.jdum.booking.search.repository.TripRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
     @Autowired
@@ -31,14 +29,21 @@ public class SearchServiceImpl implements SearchService {
     private TripRepository tripRepository;
 
     @Override
-    public List<TripDTO> search(SearchQuery query) {
+    public List<TripDTO> search(SearchQuery query) throws NotFoundException {
         log.debug("Search for: {}", query);
-        return ofNullable(tripRepository.findByOriginAndDestinationAndTripDate(query.getOrigin(), query.getDestination(), query.getTripDate()))
-                .map(trips -> trips.stream()
-                        .filter(trip -> trip.getInventory().getCount() >= 0)
-                        .map(trip -> mapperFacade.map(trip, TripDTO.class))
-                        .collect(toList()))
-                .orElseGet(ArrayList::new);
+        List<Trip> foundTrips = tripRepository.findByOriginAndDestinationAndTripDate(
+                query.getOrigin(), query.getDestination(), query.getTripDate())
+                .stream()
+                .filter(trip -> trip.getInventory().getCount() >= 0)
+                .collect(toList());
+
+        if (CollectionUtils.isEmpty(foundTrips)) {
+            throw new NotFoundException("Flights not found");
+        }
+
+        return foundTrips.stream()
+                .map(trip -> mapperFacade.map(trip, TripDTO.class))
+                .collect(toList());
     }
 
     @Override

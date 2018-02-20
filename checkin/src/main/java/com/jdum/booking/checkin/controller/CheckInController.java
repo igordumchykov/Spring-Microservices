@@ -16,12 +16,12 @@ public class CheckInController {
     @Autowired
     private CheckinService checkinService;
 
-    @RequestMapping("/get/{id}")
+    @GetMapping("/get/{id}")
     public CheckInRecordDTO getCheckIn(@PathVariable Long id) {
         return checkinService.getCheckInRecord(id);
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @PostMapping("/create")
     public Long checkIn(@RequestBody CheckInRecordDTO checkIn) {
         return checkinService.checkIn(checkIn);
     }

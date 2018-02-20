@@ -1,4 +1,4 @@
-package com.jdum.booking.webface.controller;
+package com.jdum.booking.webface.web;
 
 import com.google.common.collect.Iterables;
 import com.jdum.booking.common.dto.BookingRecordDTO;
@@ -9,15 +9,14 @@ import com.jdum.booking.webface.client.BookClient;
 import com.jdum.booking.webface.client.CheckinClient;
 import com.jdum.booking.webface.client.SearchClient;
 import com.jdum.booking.webface.dto.UIData;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -25,8 +24,7 @@ import static com.google.common.collect.Sets.newHashSet;
 
 @Controller
 @Slf4j
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class WebfaceController {
 
     static final String UIDATA_ATTRIBUTE = "uiData";
@@ -40,7 +38,6 @@ public class WebfaceController {
     static final String CHECK_IN_CONFIRM_VIEW = "checkinConfirm";
     static final String MESSAGE_ATTRIBUTE = "message";
 
-
     @Autowired
     private CheckinClient checkinClient;
 
@@ -52,7 +49,7 @@ public class WebfaceController {
 
     //Handles error using circuit breaker
 //    @HystrixCommand(fallbackMethod = "getError")
-    @RequestMapping(value = "/trip/search", method = RequestMethod.POST)
+    @PostMapping("/trip/search")
     public String searchTrip(@ModelAttribute(UIDATA_ATTRIBUTE) UIData uiData, Model model) {
 
         List<TripDTO> trips = searchClient.getTrips(uiData.getSearchQuery());
@@ -62,13 +59,13 @@ public class WebfaceController {
         return SEARCH_TRIP_RESULT_VIEW;
     }
 
-    @RequestMapping(value = "/booking/book", method = RequestMethod.POST)
+    @PostMapping("/booking/book")
     public String book(@ModelAttribute(TRIP_ATTRIBUTE) TripDTO trip, Model model) {
         model.addAttribute(UIDATA_ATTRIBUTE, new UIData(trip, new PassengerDTO()));
         return BOOKING_INPUT_VIEW;
     }
 
-    @RequestMapping(value = "/booking/confirm", method = RequestMethod.POST)
+    @PostMapping("/booking/confirm")
     public String confirmBooking(@ModelAttribute(UIDATA_ATTRIBUTE) UIData uiData, Model model) {
 
         TripDTO trip = uiData.getSelectedTrip();
@@ -84,7 +81,7 @@ public class WebfaceController {
         return BOOKING_CONFIRMATION_VIEW;
     }
 
-    @RequestMapping(value = "/booking/get", method = RequestMethod.GET)
+    @GetMapping("/booking/get")
     public String searchBooking(Model model) {
 
         UIData UIData = new UIData();
@@ -94,7 +91,7 @@ public class WebfaceController {
         return BOOKING_DETAILS_VIEW;
     }
 
-    @RequestMapping(value = "/booking/get/details", method = RequestMethod.POST)
+    @PostMapping("/booking/get/details")
     public String getBookingDetails(@ModelAttribute(UIDATA_ATTRIBUTE) UIData uiData, Model model) {
 
         Long id = Long.parseLong(uiData.getBookingId());
@@ -110,7 +107,7 @@ public class WebfaceController {
         return BOOKING_DETAILS_VIEW;
     }
 
-    @RequestMapping(value = "/booking/checkIn", method = RequestMethod.POST)
+    @PostMapping("/booking/checkIn")
     public String checkInBookingRecord(@ModelAttribute(CHECK_IN_ATTRIBUTE) CheckInRecordDTO checkIn, Model model) {
 
         checkIn.setSeatNumber("28C");// TODO: 2/14/18 add logic to generate seat number automatically

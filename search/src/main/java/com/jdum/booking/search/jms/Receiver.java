@@ -1,8 +1,7 @@
 package com.jdum.booking.search.jms;
 
 import com.jdum.booking.search.service.SearchServiceImpl;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -14,8 +13,7 @@ import java.util.Map;
 
 @Component
 @Slf4j
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class Receiver {
 
     private static String BUS_NUMBER_MSG = "BUS_NUMBER";
