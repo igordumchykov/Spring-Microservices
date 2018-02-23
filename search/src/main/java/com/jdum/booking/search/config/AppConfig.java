@@ -1,8 +1,11 @@
 package com.jdum.booking.search.config;
 
+import org.springframework.amqp.core.Queue;
 import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static com.jdum.booking.search.constants.Constants.SEARCH_QUEUE;
 
 /**
  * @author idumchykov
@@ -15,5 +18,10 @@ public class AppConfig {
     @Bean
     public AlwaysSampler defaultSampler(){
         return new AlwaysSampler();
+    }
+
+    @Bean
+    public Queue queue() {
+        return new Queue(SEARCH_QUEUE, false);
     }
 }

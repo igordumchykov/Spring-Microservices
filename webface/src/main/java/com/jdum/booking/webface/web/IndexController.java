@@ -6,15 +6,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import static com.jdum.booking.webface.constants.Constants.SEARCH_VIEW;
+import static com.jdum.booking.webface.constants.Constants.UIDATA_ATTRIBUTE;
+import static com.jdum.booking.webface.constants.REST.INDEX_PATH;
+
 @Controller
 public class IndexController {
 
-    static final String UIDATA_ATTRIBUTE = "uiData";
-    static final String SEARCH_VIEW = "search";
-
-    @GetMapping("/")
+    @GetMapping(INDEX_PATH)
     public String index(Model model) {
-        System.out.println("123");
         model.addAttribute(UIDATA_ATTRIBUTE, new UIData(SearchQuery.getDefault()));
         return SEARCH_VIEW;
     }

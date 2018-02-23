@@ -1,24 +1,28 @@
 package com.jdum.booking.prices.controller;
 
-import com.jdum.booking.prices.model.Price;
+import com.jdum.booking.common.dto.PriceDTO;
 import com.jdum.booking.prices.service.PricesService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import static com.jdum.booking.prices.constants.REST.*;
 
 @RestController
 @CrossOrigin
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PricesController {
 
     @Autowired
     private PricesService pricesService;
 
-    @GetMapping("/get")
-    public Price getPrice(@RequestParam(value = "busNumber") String busNumber,
-                          @RequestParam(value = "tripDate") String tripDate) {
+    @GetMapping(PRICE_GET_PATH)
+    public PriceDTO getPrice(@RequestParam(value = BUS_NUMBER_PARAM) String busNumber,
+                             @RequestParam(value = TRIP_DATE_PARAM) String tripDate) {
+
         return pricesService.getPrice(busNumber, tripDate);
     }
 }

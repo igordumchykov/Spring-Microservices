@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
 @EnableGlobalMethodSecurity
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.jdum.booking"})
 @EnableDiscoveryClient
 @EnableFeignClients
 @EnableCircuitBreaker

@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static com.jdum.booking.search.util.TestDataCreator.*;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
@@ -26,19 +27,14 @@ import static junit.framework.Assert.assertNotNull;
 @ActiveProfiles({"dev"})
 public class TripRepositoryDevIT {
 
-    private static String ORIGIN = "SEA";
-    private static String DESTINATION = "SFO";
-    private static String TRIP_DATE = "22-JAN-16";
-    private static String BUS_NUMBER = "BF100";
-
     @Autowired
     private TripRepository tripRepository;
 
     @Before
     public void setUp() throws Exception {
         tripRepository.save(newArrayList(
-                new Trip("BF100", "SEA", "SFO", "22-JAN-16",
-                        new Price("100", "USD"), new Inventory(100))));
+                new Trip(BUS_NUMBER, ORIGIN, DESTINATION, TRIP_DATE,
+                        new Price(PRICE_AMOUNT, PRICE_CURRENCY), new Inventory(INVENTORY_COUNT))));
     }
 
     @Test

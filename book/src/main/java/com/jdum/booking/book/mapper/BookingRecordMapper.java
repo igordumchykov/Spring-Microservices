@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class BookingRecordMapper extends ConfigurableMapper {
+
     @Override
     protected void configure(MapperFactory factory) {
 

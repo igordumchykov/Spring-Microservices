@@ -2,6 +2,8 @@ package com.jdum.booking.book.service;
 
 import com.jdum.booking.book.model.BookingStatus;
 import com.jdum.booking.common.dto.BookingRecordDTO;
+import com.jdum.booking.common.exceptions.BusinessServiceException;
+import com.jdum.booking.common.exceptions.NotFoundException;
 
 /**
  * @author idumchykov
@@ -9,9 +11,9 @@ import com.jdum.booking.common.dto.BookingRecordDTO;
  */
 public interface BookingService {
 
-    Long book(BookingRecordDTO bookingRecord);
+    Long book(BookingRecordDTO bookingRecord) throws BusinessServiceException;
 
     BookingRecordDTO getBooking(Long id);
 
-    void updateStatus(BookingStatus status, Long bookingId);
+    void updateStatus(BookingStatus status, Long bookingId) throws NotFoundException;
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface TripRepository extends JpaRepository<Trip, Long> {
+
     List<Trip> findByOriginAndDestinationAndTripDate(String origin, String destination, String tripDate);
 
     Trip findByBusNumberAndTripDate(String busNumber, String tripDate);

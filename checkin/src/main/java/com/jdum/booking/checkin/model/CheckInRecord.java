@@ -2,19 +2,21 @@ package com.jdum.booking.checkin.model;
 
 import com.jdum.booking.common.model.BaseEntity;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Date;
 
+@Accessors(chain = true)
 @Entity
 @Table(name = "CHECK_IN_RECORD")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ToString
+@ToString(callSuper = true)
 public class CheckInRecord extends BaseEntity {
 
     @Column(name = "FIRST_NAME")

@@ -2,9 +2,11 @@ package com.jdum.booking.search.model;
 
 import com.jdum.booking.common.model.BaseEntity;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
+@Accessors(chain = true)
 @Entity
 @Table(name = "SEARCH_TRIP")
 @Data

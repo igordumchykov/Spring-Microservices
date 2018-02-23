@@ -21,22 +21,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 
 import static com.google.common.collect.Sets.newHashSet;
+import static com.jdum.booking.webface.constants.Constants.*;
+import static com.jdum.booking.webface.constants.REST.*;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 public class WebfaceController {
-
-    static final String UIDATA_ATTRIBUTE = "uiData";
-    static final String TRIP_ATTRIBUTE = "trip";
-    static final String CHECK_IN_ATTRIBUTE = "checkIn";
-
-    static final String SEARCH_TRIP_RESULT_VIEW = "searchTripResult";
-    static final String BOOKING_INPUT_VIEW = "bookInput";
-    static final String BOOKING_CONFIRMATION_VIEW = "bookingConfirmation";
-    static final String BOOKING_DETAILS_VIEW = "bookingDetails";
-    static final String CHECK_IN_CONFIRM_VIEW = "checkinConfirm";
-    static final String MESSAGE_ATTRIBUTE = "message";
 
     @Autowired
     private CheckinClient checkinClient;
@@ -49,7 +40,7 @@ public class WebfaceController {
 
     //Handles error using circuit breaker
 //    @HystrixCommand(fallbackMethod = "getError")
-    @PostMapping("/trip/search")
+    @PostMapping(TRIP_SEARCH_PATH)
     public String searchTrip(@ModelAttribute(UIDATA_ATTRIBUTE) UIData uiData, Model model) {
 
         List<TripDTO> trips = searchClient.getTrips(uiData.getSearchQuery());
@@ -59,13 +50,13 @@ public class WebfaceController {
         return SEARCH_TRIP_RESULT_VIEW;
     }
 
-    @PostMapping("/booking/book")
+    @PostMapping(BOOKING_BOOK_PATH)
     public String book(@ModelAttribute(TRIP_ATTRIBUTE) TripDTO trip, Model model) {
         model.addAttribute(UIDATA_ATTRIBUTE, new UIData(trip, new PassengerDTO()));
         return BOOKING_INPUT_VIEW;
     }
 
-    @PostMapping("/booking/confirm")
+    @PostMapping(BOOKING_CONFIRM_PATH)
     public String confirmBooking(@ModelAttribute(UIDATA_ATTRIBUTE) UIData uiData, Model model) {
 
         TripDTO trip = uiData.getSelectedTrip();
@@ -77,21 +68,21 @@ public class WebfaceController {
 
         Long bookingId = bookClient.create(booking);
 
-        model.addAttribute(MESSAGE_ATTRIBUTE, "Your Booking is confirmed. Reference Number is " + bookingId);
+        model.addAttribute(MESSAGE_ATTRIBUTE, BOOKING_CONFIRMED_MSG + bookingId);
         return BOOKING_CONFIRMATION_VIEW;
     }
 
-    @GetMapping("/booking/get")
+    @GetMapping(BOOKING_GET_PATH)
     public String searchBooking(Model model) {
 
         UIData UIData = new UIData();
-        UIData.setBookingId("5");//will be displayed
+        UIData.setBookingId(BOOK_ID_DISPLAY_DEFAULT);//will be displayed
         model.addAttribute(UIDATA_ATTRIBUTE, UIData);
 
         return BOOKING_DETAILS_VIEW;
     }
 
-    @PostMapping("/booking/get/details")
+    @PostMapping(BOOKING_GET_DETAILS_PATH)
     public String getBookingDetails(@ModelAttribute(UIDATA_ATTRIBUTE) UIData uiData, Model model) {
 
         Long id = Long.parseLong(uiData.getBookingId());
@@ -107,12 +98,12 @@ public class WebfaceController {
         return BOOKING_DETAILS_VIEW;
     }
 
-    @PostMapping("/booking/checkIn")
+    @PostMapping(BOOKING_CHECK_IN_PATH)
     public String checkInBookingRecord(@ModelAttribute(CHECK_IN_ATTRIBUTE) CheckInRecordDTO checkIn, Model model) {
 
-        checkIn.setSeatNumber("28C");// TODO: 2/14/18 add logic to generate seat number automatically
+        checkIn.setSeatNumber(SEAT_NUMBER);// TODO: 2/14/18 add logic to generate seat number automatically
         Long checkInId = checkinClient.create(checkIn);
-        model.addAttribute(MESSAGE_ATTRIBUTE, "Checked In, Seat Number is 28c , check in id is " + checkInId);
+        model.addAttribute(MESSAGE_ATTRIBUTE, BOOKING_CHECK_IN_MSG + checkInId);
 
         return CHECK_IN_CONFIRM_VIEW;
     }

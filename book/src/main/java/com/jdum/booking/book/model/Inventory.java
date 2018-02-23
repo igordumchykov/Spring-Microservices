@@ -2,11 +2,13 @@ package com.jdum.booking.book.model;
 
 import com.jdum.booking.common.model.BaseEntity;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+@Accessors(chain = true)
 @Entity
 @Table(name = "INVENTORY")
 @Data

@@ -11,7 +11,11 @@ import java.util.List;
  * @since 10/4/17
  */
 public interface SearchService {
+
     List<TripDTO> search(SearchQuery query) throws NotFoundException;
 
-    void updateInventory(String flightNumber, String flightDate, int inventory);
+    /**
+     * call repository and update the priceAmount for the given trip
+     */
+    void updateInventory(String busNumber, String tripDate, int inventory) throws NotFoundException;
 }

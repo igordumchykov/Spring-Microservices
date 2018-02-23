@@ -1,13 +1,12 @@
 package com.jdum.booking.webface.web;
 
 import com.jdum.booking.common.dto.*;
-import com.jdum.booking.webface.exceptions.ExceptionHandlerController;
 import com.jdum.booking.common.exceptions.NotFoundException;
-import com.jdum.booking.common.rest.RestConstants;
 import com.jdum.booking.webface.client.BookClient;
 import com.jdum.booking.webface.client.CheckinClient;
 import com.jdum.booking.webface.client.SearchClient;
 import com.jdum.booking.webface.dto.UIData;
+import com.jdum.booking.webface.exceptions.ExceptionHandlerControllerAdvice;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,8 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
-import static com.jdum.booking.webface.web.WebfaceController.*;
+import static com.jdum.booking.webface.constants.Constants.*;
+import static com.jdum.booking.webface.constants.REST.*;
 import static java.util.Optional.ofNullable;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SuppressWarnings("FieldCanBeLocal")
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = {WebfaceController.class, ExceptionHandlerController.class})
+@WebMvcTest(controllers = {WebfaceController.class, ExceptionHandlerControllerAdvice.class})
 public class WebfaceControllerTest {
 
     private static String FIRST_NAME = "TestName";
@@ -69,7 +69,7 @@ public class WebfaceControllerTest {
 
         when(searchClient.getTrips(any(SearchQuery.class))).thenReturn(trips);
 
-        mockMvc.perform(post("/trip/search")
+        mockMvc.perform(post(TRIP_SEARCH_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .flashAttr(UIDATA_ATTRIBUTE, new UIData(SearchQuery.getDefault())))
                 .andExpect(status().isOk())
@@ -85,18 +85,18 @@ public class WebfaceControllerTest {
         //noinspection unchecked
         when(searchClient.getTrips(any(SearchQuery.class))).thenThrow(NotFoundException.class);
 
-        mockMvc.perform(post("/trip/search")
+        mockMvc.perform(post(TRIP_SEARCH_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .flashAttr(UIDATA_ATTRIBUTE, new UIData(SearchQuery.getDefault())))
                 .andExpect(status().isNotFound())
-                .andExpect(view().name(RestConstants.NOT_FOUND_VIEW_NAME));
+                .andExpect(view().name(NOT_FOUND_VIEW_NAME));
     }
 
     @Test
     public void shouldReturnBookingView() throws Exception {
         TripDTO trip = constructTrip();
 
-        mockMvc.perform(post("/booking/book")
+        mockMvc.perform(post(BOOKING_BOOK_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .flashAttr(TRIP_ATTRIBUTE, trip))
                 .andExpect(status().isOk())
@@ -110,18 +110,17 @@ public class WebfaceControllerTest {
 
         when(bookClient.create(any(BookingRecordDTO.class))).thenReturn(BOOK_ID);
 
-        mockMvc.perform(post("/booking/confirm")
+        mockMvc.perform(post(BOOKING_CONFIRM_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .flashAttr(UIDATA_ATTRIBUTE, new UIData(trip, new PassengerDTO())))
                 .andExpect(status().isOk())
                 .andExpect(view().name(BOOKING_CONFIRMATION_VIEW))
-                .andExpect(model().attribute(MESSAGE_ATTRIBUTE,
-                        "Your Booking is confirmed. Reference Number is " + BOOK_ID));
+                .andExpect(model().attribute(MESSAGE_ATTRIBUTE, BOOKING_CONFIRMED_MSG + BOOK_ID));
     }
 
     @Test
     public void shouldReturnSearchBookingView() throws Exception {
-        mockMvc.perform(get("/booking/get"))
+        mockMvc.perform(get(BOOKING_GET_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(BOOKING_DETAILS_VIEW));
     }
@@ -132,7 +131,7 @@ public class WebfaceControllerTest {
 
         when(bookClient.getBookingRecord(BOOK_ID)).thenReturn(bookingRecordDTO);
 
-        mockMvc.perform(post("/booking/get/details")
+        mockMvc.perform(post(BOOKING_GET_DETAILS_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .flashAttr(UIDATA_ATTRIBUTE, new UIData()
                         .setBookingId(String.valueOf(BOOK_ID))))
@@ -151,13 +150,12 @@ public class WebfaceControllerTest {
 
         when(checkinClient.create(checkInRecord)).thenReturn(CHECK_IN_ID);
 
-        mockMvc.perform(post("/booking/checkIn")
+        mockMvc.perform(post(BOOKING_CHECK_IN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .flashAttr(CHECK_IN_ATTRIBUTE, checkInRecord))
                 .andExpect(status().isOk())
                 .andExpect(view().name(CHECK_IN_CONFIRM_VIEW))
-                .andExpect(model().attribute(MESSAGE_ATTRIBUTE,
-                        "Checked In, Seat Number is 28c , check in id is " + CHECK_IN_ID));
+                .andExpect(model().attribute(MESSAGE_ATTRIBUTE, BOOKING_CHECK_IN_MSG + CHECK_IN_ID));
     }
 
     private List<TripDTO> constructTrips() {

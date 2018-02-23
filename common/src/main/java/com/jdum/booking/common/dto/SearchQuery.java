@@ -2,9 +2,11 @@ package com.jdum.booking.common.dto;
 
 
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Size;
 
+@Accessors(chain = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TripMapper extends ConfigurableMapper {
+
     @Override
     protected void configure(MapperFactory factory) {
 

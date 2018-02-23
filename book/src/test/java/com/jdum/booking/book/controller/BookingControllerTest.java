@@ -3,7 +3,8 @@ package com.jdum.booking.book.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jdum.booking.book.service.BookingService;
 import com.jdum.booking.common.dto.BookingRecordDTO;
-import org.junit.Before;
+import com.jdum.booking.common.exceptions.BusinessServiceException;
+import com.jdum.booking.common.exceptions.NotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.jdum.booking.book.constants.REST.BOOKING_CREATE_PATH;
+import static com.jdum.booking.book.constants.REST.BOOKING_GET_PATH;
+import static com.jdum.booking.book.utils.TestDataCreator.BOOK_ID;
+import static com.jdum.booking.book.utils.TestDataCreator.constructBookingDTO;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,11 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(BookingController.class)
 public class BookingControllerTest {
 
-    private static Long BOOK_ID = 1L;
-    private static String BUS_NUMBER = "BH100";
-
-    private BookingRecordDTO bookingRecordDTO;
-
     @MockBean
     private BookingService bookingService;
 
@@ -41,34 +42,47 @@ public class BookingControllerTest {
 
     private ObjectMapper mapper = new ObjectMapper();
 
-    @Before
-    public void setUp() throws Exception {
-        bookingRecordDTO = constructDTO();
-    }
-
     @Test
     public void shouldReturnIdWhenBook() throws Exception {
+
         when(bookingService.book(any(BookingRecordDTO.class))).thenReturn(BOOK_ID);
 
-        mockMvc.perform(post("/create")
+        mockMvc.perform(post(BOOKING_CREATE_PATH)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(mapper.writeValueAsString(bookingRecordDTO)))
+                .content(mapper.writeValueAsString(constructBookingDTO())))
                 .andExpect(status().isOk())
                 .andExpect(content().string(BOOK_ID.toString()));
     }
 
     @Test
-    public void getBooking() throws Exception {
+    public void shouldReturn400WhenBook() throws Exception {
+
+        doThrow(BusinessServiceException.class).when(bookingService).book(any(BookingRecordDTO.class));
+
+        mockMvc.perform(post(BOOKING_CREATE_PATH)
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(mapper.writeValueAsString(constructBookingDTO())))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void shouldReturnBooking() throws Exception {
+
+        BookingRecordDTO bookingRecordDTO = constructBookingDTO();
+
         when(bookingService.getBooking(BOOK_ID)).thenReturn(bookingRecordDTO);
 
-        mockMvc.perform(get("/get/" + BOOK_ID))
+        mockMvc.perform(get(BOOKING_GET_PATH, BOOK_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(bookingRecordDTO)));
     }
 
-    private BookingRecordDTO constructDTO() {
-        return new BookingRecordDTO()
-                .setBusNumber(BUS_NUMBER);
-    }
+    @Test
+    public void shouldReturn404WhenGetBooking() throws Exception {
 
+        doThrow(NotFoundException.class).when(bookingService).getBooking(BOOK_ID);
+
+        mockMvc.perform(get(BOOKING_GET_PATH, BOOK_ID))
+                .andExpect(status().isNotFound());
+    }
 }
