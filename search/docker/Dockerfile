@@ -1,8 +1,7 @@
 FROM java:8-jre
-VOLUME /tmp
-ADD  target/search-1.0-SNAPSHOT.jar search.jar
+ADD  search-1.0-SNAPSHOT.jar search-1.0.jar
 EXPOSE 8090
-ENTRYPOINT ["java","-jar","/search.jar"]
+ENTRYPOINT ["java","-jar","/search-1.0.jar"]
 
 #RUN apk -U add openssl
 #

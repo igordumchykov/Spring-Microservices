@@ -1,0 +1,72 @@
+------------------------------------
+integration with docker maven plugin
+------------------------------------
+in maven settings.xml in server tag add docker-hub credetials:
+
+<servers>
+...
+     <server>
+        <id>docker-hub</id>
+        <username>*****</username>
+        <password>*****</password>
+        <configuration>
+            <email>igor.dumchykov@gmail.com</email>
+        </configuration>
+    </server>
+
+in pom.xml add:
+
+<plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <configuration>
+            <imageName>multiplexor88/${project.artifactId}</imageName>
+            <dockerDirectory>docker</dockerDirectory>
+            <resources>
+                <resource>
+                    <targetPath>/</targetPath>
+                    <directory>${project.build.directory}</directory>
+                    <include>${project.build.finalName}.jar</include>
+                </resource>
+            </resources>
+            <serverId>docker-hub</serverId>
+            <registryUrl>https://hub.docker.com/r/multiplexor88/</registryUrl>
+        </configuration>
+        <executions>
+            <execution>
+                <id>build-image</id>
+                <phase>package</phase>
+                <goals>
+                    <goal>build</goal>
+                </goals>
+            </execution>
+            <execution>
+                <id>push-image</id>
+                <phase>deploy</phase>
+                <goals>
+                    <goal>push</goal>
+                </goals>
+            </execution>
+        </executions>
+    </plugin>
+
+Move dockerfile to docker dir
+
+run:
+mvn clean package docker:build -DpushImage
+
+For password encryption:
+
+mvn --encrypt-master-password
+<enter password and press enter, copy result>
+cd ~/.m2
+vim settings-security.xml
+add:
+<settingsSecurity>
+  <master><paste result here></master>
+</settingsSecurity>
+save, exit
+
+mvn --encrypt-password
+<enter password and save result as encrypted password>
