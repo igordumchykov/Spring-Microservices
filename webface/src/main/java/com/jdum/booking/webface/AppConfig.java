@@ -7,7 +7,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author idumchykov
  * @since 10/4/17
  */
-@EnableSwagger2
 @Configuration
 public class AppConfig {
 

@@ -10,13 +10,13 @@
 <nav>
     <ul>
         <li>BrownField Airline</li>
-        <li><a th:href="@{/}">Search</a></li>
-        <li><a th:href="@{/booking/get}">CheckIn</a></li>
+        <li><a th:href="@{/v1/}">Search</a></li>
+        <li><a th:href="@{/v1/booking/get}">CheckIn</a></li>
     </ul>
 </nav>
 <div align="center" class="form-style-8">
     <h2>Selected Flight</h2>
-    <form action="#" th:action="@{/booking/confirm}" th:object="${uiData}" method="post">
+    <form action="#" th:action="@{/v1/booking/confirm}" th:object="${uiData}" method="post">
         <h3>
             <table>
                 <tbody>

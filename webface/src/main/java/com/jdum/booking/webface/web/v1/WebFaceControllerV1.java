@@ -1,12 +1,9 @@
-package com.jdum.booking.webface.web;
+package com.jdum.booking.webface.web.v1;
 
 import com.google.common.collect.Iterables;
-import com.jdum.booking.common.dto.BookingRecordDTO;
-import com.jdum.booking.common.dto.CheckInRecordDTO;
-import com.jdum.booking.common.dto.PassengerDTO;
-import com.jdum.booking.common.dto.TripDTO;
+import com.jdum.booking.common.dto.*;
 import com.jdum.booking.webface.client.BookClient;
-import com.jdum.booking.webface.client.CheckinClient;
+import com.jdum.booking.webface.client.CheckInClient;
 import com.jdum.booking.webface.client.SearchClient;
 import com.jdum.booking.webface.dto.UIData;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -25,12 +23,13 @@ import static com.jdum.booking.webface.constants.Constants.*;
 import static com.jdum.booking.webface.constants.REST.*;
 
 @Controller
+@RequestMapping(API_V1)
 @Slf4j
 @RequiredArgsConstructor
-public class WebfaceController {
+public class WebFaceControllerV1 {
 
     @Autowired
-    private CheckinClient checkinClient;
+    private CheckInClient checkInClient;
 
     @Autowired
     private SearchClient searchClient;
@@ -38,6 +37,11 @@ public class WebfaceController {
     @Autowired
     private BookClient bookClient;
 
+    @GetMapping(INDEX_PATH)
+    public String index(Model model) {
+        model.addAttribute(UIDATA_ATTRIBUTE, new UIData(SearchQuery.getDefault()));
+        return SEARCH_VIEW;
+    }
     //Handles error using circuit breaker
 //    @HystrixCommand(fallbackMethod = "getError")
     @PostMapping(TRIP_SEARCH_PATH)
@@ -85,14 +89,14 @@ public class WebfaceController {
     @PostMapping(BOOKING_GET_DETAILS_PATH)
     public String getBookingDetails(@ModelAttribute(UIDATA_ATTRIBUTE) UIData uiData, Model model) {
 
-        Long id = Long.parseLong(uiData.getBookingId());
+        Long id = uiData.getBookingId();
         BookingRecordDTO booking = bookClient.getBookingRecord(id);
         TripDTO trip = new TripDTO(booking);
 
         PassengerDTO passenger = Iterables.getFirst(booking.getPassengers(), null);
         uiData.setPassenger(passenger);
         uiData.setSelectedTrip(trip);
-        uiData.setBookingId(String.valueOf(id));
+        uiData.setBookingId(id);
         model.addAttribute(UIDATA_ATTRIBUTE, uiData);
 
         return BOOKING_DETAILS_VIEW;
@@ -102,7 +106,7 @@ public class WebfaceController {
     public String checkInBookingRecord(@ModelAttribute(CHECK_IN_ATTRIBUTE) CheckInRecordDTO checkIn, Model model) {
 
         checkIn.setSeatNumber(SEAT_NUMBER);// TODO: 2/14/18 add logic to generate seat number automatically
-        Long checkInId = checkinClient.create(checkIn);
+        Long checkInId = checkInClient.create(checkIn);
         model.addAttribute(MESSAGE_ATTRIBUTE, BOOKING_CHECK_IN_MSG + checkInId);
 
         return CHECK_IN_CONFIRM_VIEW;

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @since 1/24/18
  */
 @FeignClient(name = "${client.checkin.service}")
-public interface CheckinClient {
+public interface CheckInClient {
 
     @RequestMapping(method = RequestMethod.POST, value = "${client.checkin.requests.create}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     Long create(CheckInRecordDTO checkInRecord);

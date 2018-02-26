@@ -11,7 +11,7 @@ public interface Constants {
     String CHECK_IN_ATTRIBUTE = "checkIn";
 
     String BOOKING_CONFIRMED_MSG = "Your Booking is confirmed. Reference Number is ";
-    String BOOKING_CHECK_IN_MSG = "Checked In, Seat Number is 28c , check in id is ";
+    String BOOKING_CHECK_IN_MSG = "Checked In, Seat Number is 28c, check in id is ";
 
     String SEARCH_VIEW = "search";
     String SEARCH_TRIP_RESULT_VIEW = "searchTripResult";
@@ -25,6 +25,6 @@ public interface Constants {
     String BAD_REQUEST_VIEW_NAME = "400";
     String ERROR_MODEL_NAME = "exception";
 
-    String BOOK_ID_DISPLAY_DEFAULT = "1";
+    long BOOK_ID_DISPLAY_DEFAULT = 1L;
     String SEAT_NUMBER = "28C";
 }

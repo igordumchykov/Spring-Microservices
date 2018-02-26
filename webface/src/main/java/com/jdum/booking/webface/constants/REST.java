@@ -6,6 +6,8 @@ package com.jdum.booking.webface.constants;
  */
 public interface REST {
 
+    String API_V1 = "/v1";
+    String API_V2 = "/v2";
     String INDEX_PATH = "/";
     String TRIP_SEARCH_PATH = "/trip/search";
     String BOOKING_BOOK_PATH = "/booking/book";

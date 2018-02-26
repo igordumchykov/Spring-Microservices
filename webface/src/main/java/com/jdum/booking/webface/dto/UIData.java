@@ -17,7 +17,7 @@ public class UIData {
     private List<TripDTO> trips;
     private TripDTO selectedTrip;
     private PassengerDTO passenger;
-    private String bookingId;
+    private Long bookingId;
 
     public UIData(TripDTO selectedTrip, PassengerDTO passenger) {
         this.selectedTrip = selectedTrip;
@@ -27,4 +27,5 @@ public class UIData {
     public UIData(SearchQuery searchQuery) {
         this.searchQuery = searchQuery;
     }
+
 }
