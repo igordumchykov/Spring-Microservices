@@ -1,4 +1,4 @@
-package com.jdum.booking.search.controller;
+package com.jdum.booking.search.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jdum.booking.common.dto.SearchQuery;

@@ -1,4 +1,4 @@
-package com.jdum.booking.prices.controller;
+package com.jdum.booking.prices.web;
 
 import com.jdum.booking.common.dto.PriceDTO;
 import com.jdum.booking.common.exceptions.NotFoundException;

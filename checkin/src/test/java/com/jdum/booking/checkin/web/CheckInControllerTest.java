@@ -1,4 +1,4 @@
-package com.jdum.booking.checkin.controller;
+package com.jdum.booking.checkin.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jdum.booking.checkin.service.CheckinService;

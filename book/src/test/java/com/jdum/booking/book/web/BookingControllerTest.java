@@ -1,4 +1,4 @@
-package com.jdum.booking.book.controller;
+package com.jdum.booking.book.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jdum.booking.book.service.BookingService;

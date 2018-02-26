@@ -1,4 +1,4 @@
-package com.jdum.booking.search.controller;
+package com.jdum.booking.search.web;
 
 import com.jdum.booking.common.dto.SearchQuery;
 import com.jdum.booking.common.dto.TripDTO;

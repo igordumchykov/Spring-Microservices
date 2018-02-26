@@ -1,4 +1,4 @@
-package com.jdum.booking.book.controller;
+package com.jdum.booking.book.web;
 
 import com.jdum.booking.book.service.BookingService;
 import com.jdum.booking.common.dto.BookingRecordDTO;

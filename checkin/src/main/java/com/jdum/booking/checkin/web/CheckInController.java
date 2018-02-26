@@ -1,4 +1,4 @@
-package com.jdum.booking.checkin.controller;
+package com.jdum.booking.checkin.web;
 
 import com.jdum.booking.checkin.service.CheckinService;
 import com.jdum.booking.common.dto.CheckInRecordDTO;
