@@ -1,7 +1,6 @@
-package com.jdum.booking.webface;
+package com.jdum.booking.webface.config;
 
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @author idumchykov
