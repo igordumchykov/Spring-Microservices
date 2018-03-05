@@ -23,6 +23,7 @@ public interface Constants {
 
     String NOT_FOUND_VIEW_NAME = "404";
     String BAD_REQUEST_VIEW_NAME = "400";
+    String INTERNAL_ERROR_VIEW_NAME = "500";
     String ERROR_MODEL_NAME = "exception";
 
     long BOOK_ID_DISPLAY_DEFAULT = 1L;

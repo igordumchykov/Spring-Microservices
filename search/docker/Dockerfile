@@ -1,7 +1,9 @@
 FROM java:8-jre
+VOLUME /tmp
 ADD  search-1.0-SNAPSHOT.jar search-1.0.jar
 EXPOSE 8090
-ENTRYPOINT ["java","-jar","/search-1.0.jar"]
+RUN sh -c 'touch /search-1.0.jar'
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar","/search-1.0.jar"]
 
 #RUN apk -U add openssl
 #

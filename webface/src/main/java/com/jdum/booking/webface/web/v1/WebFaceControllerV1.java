@@ -2,10 +2,13 @@ package com.jdum.booking.webface.web.v1;
 
 import com.google.common.collect.Iterables;
 import com.jdum.booking.common.dto.*;
+import com.jdum.booking.common.exceptions.BusinessServiceException;
+import com.jdum.booking.common.exceptions.NotFoundException;
 import com.jdum.booking.webface.client.BookClient;
 import com.jdum.booking.webface.client.CheckInClient;
 import com.jdum.booking.webface.client.SearchClient;
 import com.jdum.booking.webface.dto.UIData;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +45,10 @@ public class WebFaceControllerV1 {
         model.addAttribute(UIDATA_ATTRIBUTE, new UIData(SearchQuery.getDefault()));
         return SEARCH_VIEW;
     }
-    //Handles error using circuit breaker
-//    @HystrixCommand(fallbackMethod = "getError")
+
     @PostMapping(TRIP_SEARCH_PATH)
+    @HystrixCommand(fallbackMethod = "handleFeignError",
+            ignoreExceptions = {NotFoundException.class, BusinessServiceException.class})
     public String searchTrip(@ModelAttribute(UIDATA_ATTRIBUTE) UIData uiData, Model model) {
 
         List<TripDTO> trips = searchClient.getTrips(uiData.getSearchQuery());
@@ -110,5 +114,11 @@ public class WebFaceControllerV1 {
         model.addAttribute(MESSAGE_ATTRIBUTE, BOOKING_CHECK_IN_MSG + checkInId);
 
         return CHECK_IN_CONFIRM_VIEW;
+    }
+
+    //Handles error using circuit breaker
+    public String handleFeignError(@ModelAttribute(UIDATA_ATTRIBUTE) UIData uiData, Model model, Throwable exception) {
+        model.addAttribute(ERROR_MODEL_NAME, exception);
+        return INTERNAL_ERROR_VIEW_NAME;
     }
 }
