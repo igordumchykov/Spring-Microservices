@@ -148,6 +148,7 @@
                             </resource>
                         </resources>
                         <serverId>docker-hub</serverId>
+                        <!--<pushImage>true</pushImage>-->
                         <registryUrl>https://hub.docker.com/r/multiplexor88/</registryUrl>
                     </configuration>
                     <executions>
@@ -160,7 +161,7 @@
                         </execution>
                         <execution>
                             <id>push-image</id>
-                            <phase>deploy</phase>
+                            <phase>install</phase>
                             <goals>
                                 <goal>push</goal>
                             </goals>
