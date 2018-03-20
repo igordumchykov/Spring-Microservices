@@ -5,7 +5,6 @@ import com.jdum.booking.prices.repository.PricesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -15,7 +14,7 @@ import static com.google.common.collect.Lists.newArrayList;
  * @since 1/31/18
  */
 @Component
-@Profile({"dev"})
+//@Profile({"dev"})
 public class DevBootstrap implements ApplicationListener<ApplicationReadyEvent> {
 
     private static boolean eventReceived;

@@ -1,0 +1,95 @@
+------------------------------------
+install
+------------------------------------
+minikube:
+https://kubernetes.io/docs/tasks/tools/install-minikube/
+
+or:
+
+brew install kubectl
+brew cask install minikube
+
+install vm (virtual box or others):
+brew install docker-machine-driver-xhyve
+sudo chown root:wheel /usr/local/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
+sudo chmod u+s /usr/local/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
+
+------------------------------------
+run
+------------------------------------
+
+minikube start --vm-driver=xhyve
+(do not specify --vm-driver=xhyve if vm is virtualbox)
+(can specify --kubernetes-version="")
+see context:
+kubectl config current-context
+
+now it is minikube, but can be swithed to production context
+
+list pods:
+kubectl get pods
+
+------------------------------------
+stop
+------------------------------------
+minikube stop
+minikube delete
+
+------------------------------------
+monitoring
+------------------------------------
+minikube dashboard
+
+------------------------------------
+create and deploy 1
+------------------------------------
+
+create manifest file: manifest.yaml (arbitrary name with ReplicationController or Pod declaration)
+kubectl create -f manifest.yaml
+
+get rc status:
+kubectl get rc -o wide
+
+list pods:
+kubectl get pods
+kubectl get rc
+
+describe pods/rc:
+kubectl describe pods
+kubectl describe rc
+
+delete pods:
+kubectl delete pods <pod name>
+
+expose port (create service):
+kubectl expose pod <pod name> --name=<specify service name> --target-port=<specify port> --type=NodePort
+
+delete service:
+kubectl delete svc <service name>
+
+------------------------------------
+create and deploy 2
+------------------------------------
+kubectl run config --image=multiplexor88/config:latest --port=8888
+kubectl expose deployment config --type="LoadBalancer"
+minikube service config --url
+
+summary:
+create file with rc
+create file with service
+
+kubectl create -f rc.yaml
+kubectl create -f svc.yaml
+
+minikube service config --url
+
+Deployment:
+create file deploy.yaml
+kubectl create -f deploy.yaml
+kubectl get rs
+kubectl describe deploy <deploy app name>
+kubectl create -f svc.yaml
+
+
+kubectl config set-context $(kubectl config current-context) --namespace=<insert-namespace-name-here>
+kubectl --namespace=<insert-namespace-name-here> get pods

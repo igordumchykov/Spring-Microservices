@@ -1,0 +1,41 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: search-config
+  namespace: qa
+data:
+  application.yaml: |-
+
+    server:
+      port: 8090
+
+    spring:
+      application:
+        name: search-app
+
+      rabbitmq:
+        host: 127.0.0.1
+        port: 5672
+        username: guest
+        password: guest
+
+      datasource:
+        url: jdbc:mysql://localhost:3306/booking_qa_db
+        username: booking_qa_1
+        password: ENC(e4cSO2JGHlh6L9Q30BbIO4kAOsK/MBJI)
+        platform: qa
+
+      jpa:
+        hibernate:
+          ddl-auto: update
+        show-sql: true
+
+      jasypt:
+        encryptor:
+          password: salt
+
+      logging:
+        level:
+          com:
+            jdum:
+              booking: DEBUG

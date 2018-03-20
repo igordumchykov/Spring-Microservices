@@ -1,0 +1,133 @@
+------------------------------------
+Integration with Spring Boot:
+
+https://www.youtube.com/watch?v=CYrCW1SjpOI
+https://dzone.com/articles/spring-boot-microservice-development-on-kubernetes
+------------------------------------
+
+<dependency>
+    <groupId>io.fabric8</groupId>
+    <artifactId>spring-cloud-starter-kubernetes</artifactId>
+    <version>0.1.6</version>
+</dependency>
+
+Next plugin do not need to add to pom.xml. In CLI run:
+mvn io.fabric8:fabric8-maven-plugin:3.5.33:setup
+
+After that, plugin will be added to pom:
+<plugin>
+    <groupId>io.fabric8</groupId>
+    <artifactId>fabric8-maven-plugin</artifactId>
+    <version>3.5.33</version>
+    <executions>
+        <execution>
+            <id>fmp</id>
+            <goals>
+                <goal>resource</goal>
+                <goal>helm</goal>
+                <goal>build</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+
+run:
+mvn fabric8:cluster-start -Dfabric8.cluster.kind=openshift
+
+in the end we should see the next:
+
+[INFO] F8:gofabric8 The server is accessible via web console at:
+[INFO] F8:gofabric8     https://192.168.64.12:8443
+[INFO] F8:gofabric8
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 01:13 min
+[INFO] Finished at: 2018-03-10T12:52:35+02:00
+[INFO] Final Memory: 27M/406M
+[INFO] ------------------------------------------------------------------------
+
+If oc is not accessible from CLI, need to add to PATH:
+
+echo 'export PATH=$PATH:$HOME/.fabric8/bin' >> ~/.bash_profile
+export PATH=$PATH:$HOME/.fabric8/bin
+
+we also can use minikube with it`s kubectl instead of minishift with oc.
+For doing that:
+run mvn fabric8:cluster-start or go to minikube page installation
+------------------------------------
+Externalize config properties
+------------------------------------
+
+Create dev, qa, etc. yaml config files:
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: test
+  namespace: dev
+data:
+  application.yaml: |-
+    config:
+      message: Dev profile
+
+run next (should be logged as admin!!! // oc login -u system:admin
+oc create namespace dev
+oc create namespace qa
+
+oc create -f dev.yaml
+oc create -f qa.yaml
+
+when start spring boot, add env variable:
+KUBERNETES_NAMESPACE=qa
+
+issues with running cluster and spring boot locally:
+
+login:
+kubectl config view
+kubectl config set-credentials jdum-dev/booking.jdum.com --username=jdum-dev --password=jdum-dev
+kubectl config set-cluster booking.jdum.com --insecure-skip-tls-verify=true --server=https://booking.jdum.com
+kubectl config set-context dev/booking.jdum.com/jdum-dev --user=jdum-dev/booking.jdum.com --namespace=dev --cluster=booking.jdum.com
+kubectl config use-context dev/booking.jdum.com/jdum-dev
+
+switch to other context:
+kubectl config use-context <name>
+
+to run locally, also need:
+eval $(minikube docker-env)
+
+
+
+useful links:
+https://kukulinski.com/10-most-common-reasons-kubernetes-deployments-fail-part-1/
+https://labs.consol.de/development/java/kubernetes/2017/02/10/minikube.html
+https://maven.fabric8.io/#fabric8:cluster-start
+http://blog.christianposta.com/kubernetes/logging-into-a-kubernetes-cluster-with-kubectl/
+
+
+--------------------------------
+local startup guide:
+--------------------------------
+minikube start
+eval $(minikube docker-env)
+export KUBERNETES_NAMESPACE=dev
+
+startup rabbitmq:
+kubectl create -f rabitmq-deployment.yaml
+kubectl create -f rabbitmq-svc.yaml
+
+for each service:
+cd <servicename_folder>
+kubectl create -f <path_to_config_map>.<namespace>.yaml
+mvn clean fabric8:run -DskipTests=true -Dfabric8.onExit=undeploy
+--------------------------------
+
+./start_service.sh -n dev -t true -s webface-service -p webface
+./start_service.sh -n dev -t true -s search-service -p search
+./start_service.sh -n dev -t true -s book-service -p book
+./start_service.sh -n dev -t true -s checkin-service -p checkin
+./start_service.sh -n dev -t true -s prices-service -p prices
+
+
+
+

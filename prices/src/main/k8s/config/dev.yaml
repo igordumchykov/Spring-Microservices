@@ -1,0 +1,37 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: prices-service
+  namespace: dev
+data:
+  application.yaml: |-
+
+    server:
+      port: 8080
+
+    spring:
+      application:
+        name: prices-service
+
+      rabbitmq:
+        addresses: rabbitmq
+        username: guest
+        password: guest
+
+      datasource:
+        url: jdbc:h2:mem:pricesdb
+        username: sa
+        password:
+
+      h2:
+        console:
+          enabled: true
+      jpa:
+        hibernate:
+          ddl-auto: update
+
+    logging:
+      level:
+        com:
+          jdum:
+            booking: INFO

@@ -1,0 +1,13 @@
+------------------------------------
+install jenkins on kubernetes
+
+http://www.monkeylittle.com/blog/2017/02/07/deploying-jenkins-with-kubernetes.html
+------------------------------------
+
+kubectl -create -f jenkins.yaml
+
+JENKINS_POD_NAME=$(kubectl get pod | awk '{print $1}' | grep jenkins)
+kubectl exec -it ${JENKINS_POD_NAME} -- /bin/bash
+
+cat /var/.../initPassword..
+copy 1 line, past into window

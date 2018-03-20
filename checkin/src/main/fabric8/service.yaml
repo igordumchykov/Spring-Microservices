@@ -1,0 +1,8 @@
+metadata:
+  name: checkin-service
+spec:
+  type: NodePort
+  ports:
+  - port: 8070
+    nodePort: 30004
+    protocol: TCP

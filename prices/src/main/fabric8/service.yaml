@@ -1,0 +1,8 @@
+metadata:
+  name: prices-service
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    nodePort: 30005
+    protocol: TCP
